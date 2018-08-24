@@ -9,7 +9,7 @@ class ArmEnv(object):
     dt = .05
     action_bound = [-5, 5]
     goal = {'x': 200., 'y': 200., 'z': 200, 'l': 40}
-    state_dim = 6
+    state_dim = 7
     action_dim = 4
     inertia_mat = [[0.005, 0., 0.], [0., 0.005, 0.], [0., 0., 0.001]]
     inv_inertia_mat = [[1./0.005, 0., 0.], [0., 1./0.005, 0.], [0., 0., 1./0.001]]
@@ -29,7 +29,7 @@ class ArmEnv(object):
         #self.uav_ori = np.array([1., 0., 0., 0.])
         self.uav_euler = np.zeros(3)
         self.uav_d_euler = np.zeros(3)
-        self.uav_pos = np.zeros(2)
+        self.uav_pos = np.zeros(3)
         self.uav_v = np.zeros(3)
         self.uav_w = np.zeros(3)
         self.on_goal = 0
@@ -71,15 +71,15 @@ class ArmEnv(object):
         self.uav_v = self.increment_state(self.uav_v, linear_acc)
         self.uav_pos = self.increment_state(self.uav_pos, self.uav_v)
 
-                
 
 
 
-        dist1 = [(self.goal['x'] - self.uav_pos[0]), (self.goal['y'] - self.uav_pos[1])]
+
+        dist1 = [(self.goal['x'] - self.uav_pos[0]), (self.goal['y'] - self.uav_pos[1]), (self.goal['z'] - self.uav_pos[2])]
         #print dist1
         #r = -np.sqrt(dist1[0]**2+dist1[1]**2)
         #r = -(dist1[0]**2+dist1[1]**2)
-        r = np.tanh(1 - 0.005 * (abs(dist1[0]) + abs(dist1[1])))
+        r = np.tanh(1 - 0.005 * (abs(dist1[0]) + abs(dist1[1]) + abs(dist1[2])))
         if self.uav_pos[0] > 400 or self.uav_pos[1] > 400 or self.uav_pos[0] < 0 or self.uav_pos[1] < 0:
             r -= 10
         #r = 1./(dist1[0] + 0.001) + 1./(dist1[1] + 0.001) + 1./(dist1[2] + 0.001)
@@ -194,7 +194,7 @@ class ArmEnv(object):
         #a1xy_ = np.array([np.cos(a1r), np.sin(a1r)]) * a1l + a1xy  # a1 end and a2 start (x1, y1)
         #finger = np.array([np.cos(a1r + a2r), np.sin(a1r + a2r)]) * a2l + a1xy_  # a2 end (x2, y2)
         # normalize features
-        dist1 = [(self.goal['x'] - self.uav_pos[0])/400, (self.goal['y'] - self.uav_pos[1])/400]
+        dist1 = [(self.goal['x'] - self.uav_pos[0]), (self.goal['y'] - self.uav_pos[1]), (self.goal['z'] - self.uav_pos[2])]
         #dist2 = [(self.goal['x'] - finger[0])/400, (self.goal['y'] - finger[1])/400]
         # state
         s = np.concatenate((self.uav_pos, dist1, [1. if self.on_goal else 0.]))
