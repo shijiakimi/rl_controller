@@ -2,10 +2,8 @@ import numpy as np
 
 
 class noise:
-	
-
 	def __init__(self, state_size, mean, std_dev, theta):
-		self.state = [mean for i in range(state_size)]		
+		self.state = [mean for i in range(state_size)]
 		self.mean = [mean for i in range(state_size)]
 		self.std_dev = std_dev
 		self.theta = theta

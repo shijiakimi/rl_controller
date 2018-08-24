@@ -27,11 +27,11 @@ class DDPG(object):
         self.R = tf.placeholder(tf.float32, [None, 1], 'r')
 
 
-	self.action_bound = [-5, 5]
-	
+        self.action_bound = [-5, 5]
+
         with tf.variable_scope('Actor'):
             unbounded_a = self._build_a(self.S, scope='eval', trainable=True)
-	    self.a = tf.multiply(unbounded_a, self.action_bound)
+            self.a = tf.multiply(unbounded_a, self.action_bound)
             a_ = self._build_a(self.S_, scope='target', trainable=False)
         with tf.variable_scope('Critic'):
             # assign self.a = a in memory when calculating q for td_error,
@@ -53,16 +53,15 @@ class DDPG(object):
         # in the feed_dic for the td_error, the self.a should change to actions in memory
         td_error = tf.losses.mean_squared_error(labels=q_target, predictions=q)
         self.ctrain = tf.train.AdamOptimizer(LR_C).minimize(td_error, var_list=self.ce_params)
-	#self.a_grads = tf.gradients(q, self.a)[0]
-	#self.actor_grads = tf.gradients(self.a, self.ae_params, -self.a_grads)
+        #self.a_grads = tf.gradients(q, self.a)[0]
+        #self.actor_grads = tf.gradients(self.a, self.ae_params, -self.a_grads)
         a_loss = - tf.reduce_mean(q)    # maximize the q
         #self.atrain = tf.train.AdamOptimizer(LR_A).apply_gradients(zip(self.actor_grads, self.ae_params))
-	self.atrain = tf.train.AdamOptimizer(LR_A).minimize(a_loss, var_list=self.ae_params)
+        self.atrain = tf.train.AdamOptimizer(LR_A).minimize(a_loss, var_list=self.ae_params)
         self.sess.run(tf.global_variables_initializer())
 
     def choose_action(self, s):
-	raw_action = self.sess.run(self.a, {self.S: s[None, :]})[0]
-	
+        raw_action = self.sess.run(self.a, {self.S: s[None, :]})[0]
         return raw_action
 
     def learn(self):
@@ -90,7 +89,7 @@ class DDPG(object):
     def _build_a(self, s, scope, trainable):
         with tf.variable_scope(scope):
             net = tf.layers.dense(s, 100, activation=tf.nn.relu, name='l1', trainable=trainable)
-	    #net1 = tf.layers.dense(net,300, activation = tf.nn.relu, name = 'l2', trainable = trainable)
+            #net1 = tf.layers.dense(net,300, activation = tf.nn.relu, name = 'l2', trainable = trainable)
             a = tf.layers.dense(net, self.a_dim, activation=tf.nn.tanh, name='a', trainable=trainable)
             return tf.multiply(a, self.a_bound, name='scaled_a')
 
@@ -101,7 +100,7 @@ class DDPG(object):
             w1_a = tf.get_variable('w1_a', [self.a_dim, n_l1], trainable=trainable)
             b1 = tf.get_variable('b1', [1, n_l1], trainable=trainable)
             net = tf.nn.relu(tf.matmul(s, w1_s) + tf.matmul(a, w1_a) + b1)
-	    #net1 = tf.layers.dense(net, n_l1, trainable = trainable)
+            #net1 = tf.layers.dense(net, n_l1, trainable = trainable)
             return tf.layers.dense(net, 1, trainable=trainable)  # Q(s,a)
 
     def save(self):

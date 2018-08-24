@@ -26,20 +26,19 @@ noise_mean = 0
 noise_std_dev = 0.5
 noise_theta = 0.25
 noise = noise(a_dim, noise_mean, noise_std_dev, noise_theta)
-	
 steps = []
 def train():
     # start training
     for i in range(MAX_EPISODES):
         s = env.reset()
-	noise.reset()
+        noise.reset()
         ep_r = 0.
         
         for j in range(MAX_EP_STEPS):
-	#j = 0
-	#while not (s[0] > 400 or s[1] > 400 or s[0] < 0 or s[1] < 0):
-	        
-	    env.render()
+        #j = 0
+        #while not (s[0] > 400 or s[1] > 400 or s[0] < 0 or s[1] < 0):
+
+            env.render()
 
             a = rl.choose_action(s) + noise.sample_noise()
 
@@ -56,11 +55,8 @@ def train():
 
             if done or j == MAX_EP_STEPS-1:
                 print('Ep: %i | %s | ep_r: %.1f | step: %i' % (i, '---' if not done else 'done', ep_r, j))
-	    	#x.append(s[4])
-	    	#y.append(s[5])
-	    	#z.append(s[6])
                 break
-	    #j += 1
+    #j += 1
     #plt.plot(x,range(MAX_EPISODES))
     #plt.plot(x,range(MAX_EPISODES))
     #plt.plot(x,range(MAX_EPISODES))
