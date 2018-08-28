@@ -38,7 +38,7 @@ def train():
         #j = 0
         #while not (s[0] > 400 or s[1] > 400 or s[0] < 0 or s[1] < 0):
 
-            env.render()
+            #env.render()
 
             a = rl.choose_action(s) + noise.sample_noise()
 
