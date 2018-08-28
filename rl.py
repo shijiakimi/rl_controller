@@ -27,7 +27,7 @@ class DDPG(object):
         self.R = tf.placeholder(tf.float32, [None, 1], 'r')
 
 
-        self.action_bound = [-5, 5]
+        self.action_bound = [50, 50, 50, 50]
 
         with tf.variable_scope('Actor'):
             unbounded_a = self._build_a(self.S, scope='eval', trainable=True)
