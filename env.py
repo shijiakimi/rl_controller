@@ -79,8 +79,8 @@ class ArmEnv(object):
         #print dist1
         #r = -np.sqrt(dist1[0]**2+dist1[1]**2)
         #r = -(dist1[0]**2+dist1[1]**2)
-        r = np.tanh(1 - 0.005 * (abs(dist1[0]) + abs(dist1[1]) + abs(dist1[2])))
-        if self.uav_pos[0] > 400 or self.uav_pos[1] > 400 or self.uav_pos[0] < 0 or self.uav_pos[1] < 0:
+        r = np.tanh(1 - 0.02 * (abs(dist1[0]) + abs(dist1[1]) + abs(dist1[2])))
+        if self.uav_pos[0] > 100 or self.uav_pos[1] > 100 or self.uav_pos[2] > 100 or self.uav_pos[0] < 0 or self.uav_pos[1] < 0 or self.uav_pos[2] < 0:
             r -= 10
         #r = 1./(dist1[0] + 0.001) + 1./(dist1[1] + 0.001) + 1./(dist1[2] + 0.001)
         # done and reward
