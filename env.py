@@ -252,7 +252,7 @@ class ArmEnv(object):
         return ori/norm
     '''
 
-'''
+"""
 class Viewer(pyglet.window.Window):
     def __init__(self, uav_pos, goal):
         # vsync=False to not use the monitor FPS, we can speed up training
@@ -276,14 +276,6 @@ class Viewer(pyglet.window.Window):
                      220, 220,
                      220, 200]),
             ('c3B', (249, 86, 86) * 4,))    # color
-        '''
-        self.arm2 = self.batch.add(
-            4, pyglet.gl.GL_QUADS, None,
-            ('v2f', [100, 150,              # location
-                     100, 160,
-                     200, 160,
-                     200, 150]), ('c3B', (249, 86, 86) * 4,))
-        '''
     def render(self, uav_pos):
         self._update_uav(uav_pos)
         self.switch_to()
@@ -304,7 +296,7 @@ class Viewer(pyglet.window.Window):
         #print self.uav_pos
         #print xy01, xy02, xy11, xy12
         self.uav.vertices = np.concatenate((xy01, xy02, xy11, xy12))
-'''
+"""
 
 '''
 if __name__ == '__main__':
