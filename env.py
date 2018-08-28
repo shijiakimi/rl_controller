@@ -8,7 +8,7 @@ class ArmEnv(object):
     #viewer = None
     dt = .05
     action_bound = [-5, 5]
-    goal = {'x': 200., 'y': 200., 'z': 200, 'l': 40}
+    goal = {'x': 50., 'y': 50., 'z': 50, 'l': 10}
     state_dim = 7
     action_dim = 4
     inertia_mat = [[0.005, 0., 0.], [0., 0.005, 0.], [0., 0., 0.001]]
@@ -183,7 +183,7 @@ class ArmEnv(object):
         #self.viewer = None
 
         self.uav_euler = np.zeros(3)
-        self.uav_pos = 200 * np.random.rand(3)
+        self.uav_pos = 50 * np.random.rand(3)
         self.uav_v = np.zeros(3)
         self.uav_w = np.zeros(3)
         self.uav_d_euler = np.zeros(3)
