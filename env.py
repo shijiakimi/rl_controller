@@ -5,7 +5,7 @@ import math
 # roll, pitch, yaw = theta = [phi, theta, psi]
 # adjacent propellers are oriented opposite each other
 class ArmEnv(object):
-    viewer = None
+    #viewer = None
     dt = .05
     action_bound = [-5, 5]
     goal = {'x': 200., 'y': 200., 'z': 200, 'l': 40}
@@ -199,13 +199,13 @@ class ArmEnv(object):
         # state
         s = np.concatenate((self.uav_pos, dist1, [1. if self.on_goal else 0.]))
         return s
-
+''''
     def render(self):
         if self.viewer is None:
             #print self.uav_pos
             self.viewer = Viewer(self.uav_pos, self.goal)
         self.viewer.render(self.uav_pos)
-
+'''
 
     '''
     def quat_to_R(self, quat):
@@ -252,7 +252,7 @@ class ArmEnv(object):
         return ori/norm
     '''
 
-
+'''
 class Viewer(pyglet.window.Window):
     def __init__(self, uav_pos, goal):
         # vsync=False to not use the monitor FPS, we can speed up training
@@ -304,7 +304,7 @@ class Viewer(pyglet.window.Window):
         #print self.uav_pos
         #print xy01, xy02, xy11, xy12
         self.uav.vertices = np.concatenate((xy01, xy02, xy11, xy12))
-
+'''
 
 '''
 if __name__ == '__main__':
