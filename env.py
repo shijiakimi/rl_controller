@@ -64,7 +64,6 @@ class ArmEnv(object):
 
 
         linear_acc = self.linear_acc(action)
-        print linear_acc
         d_w = self.angular_acc(action)
         self.uav_w = np.add(self.uav_w, self.dt * np.array(d_w))
         d_euler = self.angular_vel_to_d_angles()
@@ -133,6 +132,7 @@ class ArmEnv(object):
 
     def linear_acc(self, action):
         R = self.angles_to_R(self.uav_euler)
+        print R
         T_body = self.get_thrust(action)
         T_inertia = list(np.dot(R, T_body))
         T_inertia = [1.0/self.mass * T for T in T_inertia]
