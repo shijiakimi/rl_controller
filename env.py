@@ -64,19 +64,19 @@ class ArmEnv(object):
 
 
         linear_acc = self.linear_acc(action)
-        print 'linear_acc', linear_acc
+        #print 'linear_acc', linear_acc
         d_w = self.angular_acc(action)
         print 'dw', d_w
         self.uav_w = np.add(self.uav_w, self.dt * np.array(d_w))
-        print 'w', self.uav_w
+        #print 'w', self.uav_w
         d_euler = self.angular_vel_to_d_angles()
-        print 'd_euler', d_euler
+        #print 'd_euler', d_euler
         self.uav_euler = self.increment_state(self.uav_euler, d_euler)
-        print 'uav_euler', self.uav_euler
+        #print 'uav_euler', self.uav_euler
         self.uav_v = self.increment_state(self.uav_v, linear_acc)
-        print 'uav_v', self.uav_v
+        #print 'uav_v', self.uav_v
         self.uav_pos = self.increment_state(self.uav_pos, self.uav_v)
-        print 'uav_pos', self.uav_pos
+        #print 'uav_pos', self.uav_pos
 
 
 
@@ -151,11 +151,16 @@ class ArmEnv(object):
 
     def angular_acc(self, action):
         torque = self.get_torque(action)
+        print 'torque', torque
         tmp = np.dot(self.inertia_mat, self.uav_w)
+        print 'tmp1', tmp
         tmp = np.cross(self.uav_w, list(tmp))
+        print 'tmp2', tmp
         tmp *= -1
         tmp = np.add(torque, list(tmp))
+        print 'tmp3', tmp
         angular_acc = np.dot(self.inv_inertia_mat, tmp)
+        print 'angular_acc', angular_acc
         return list(angular_acc)
 
 
