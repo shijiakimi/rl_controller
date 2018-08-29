@@ -118,6 +118,7 @@ class ArmEnv(object):
         trans_mat = [[1, 0, -math.sin(theta)],
                      [0, math.cos(phi), math.cos(theta) * math.sin(phi)],
                      [0, -math.sin(phi), math.cos(theta) * math.cos(phi)]]
+        print trans_mat, np.linalg.inv(trans_mat)
         return list(np.dot(np.linalg.inv(trans_mat), self.uav_w))
 
 
