@@ -38,11 +38,14 @@ class ArmEnv(object):
     def step(self, action):
         done = False
         action = np.clip(action, *self.action_clip)
+        print 'action', action
         self.get_prop_wind_speed()
         thrusts = self.get_thrust(action)
+        print 'thrust', thrusts
         linear_acc = self.get_linear_forces(thrusts) / self.mass
+        print 'linear_acc', linear_acc
         self.uav_pos += self.uav_v * self.dt * 0.5 * linear_acc * self.dt ** 2
-
+        print 'pos', self.uav_pos
         self.uav_v += linear_acc * self.dt
 
         moments = self.get_moments(thrusts)
@@ -117,21 +120,6 @@ class ArmEnv(object):
         linear_acc = np.add(list(tmp), F_drag)
         return list(linear_acc)
 
-
-    def angular_acc(self, action):
-        print 'action', action
-        torque = self.get_torque(action)
-        print 'torque', torque
-        tmp = np.dot(self.inertia_mat, self.uav_w)
-        print 'tmp1', tmp
-        tmp = np.cross(self.uav_w, list(tmp))
-        print 'tmp2', tmp
-        tmp *= -1
-        tmp = np.add(torque, list(tmp))
-        print 'tmp3', tmp
-        angular_acc = np.dot(self.inv_inertia_mat, tmp)
-        print 'angular_acc', angular_acc
-        return list(angular_acc)
 
 
 
