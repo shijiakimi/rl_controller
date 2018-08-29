@@ -150,6 +150,7 @@ class ArmEnv(object):
 
 
     def angular_acc(self, action):
+        print 'action', action
         torque = self.get_torque(action)
         print 'torque', torque
         tmp = np.dot(self.inertia_mat, self.uav_w)
