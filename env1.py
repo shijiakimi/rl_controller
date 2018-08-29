@@ -5,7 +5,7 @@ import math
 # adjacent propellers are oriented opposite each other
 class ArmEnv(object):
     dt = .02
-    action_bound = [0, 1]
+    action_bound = [0, 10]
     action_clip = [0, 1000]
     goal = {'x': 100, 'y': 100, 'z': 100, 'l': 10}
     state_dim = 7
@@ -110,15 +110,6 @@ class ArmEnv(object):
         return R
 
 
-    def linear_acc(self, action):
-        R = self.angles_to_R(self.uav_euler)
-        T_body = self.get_thrust(action)
-        T_inertia = list(np.dot(R, T_body))
-        T_inertia = [1.0/self.mass * T for T in T_inertia]
-        F_drag = [-v * self.kd for v in self.uav_v]
-        tmp = np.add(list(self.gravity), T_inertia)
-        linear_acc = np.add(list(tmp), F_drag)
-        return list(linear_acc)
 
 
 
@@ -150,20 +141,6 @@ class ArmEnv(object):
         lin_force = np.dot(RT, body_force)
         lin_force += gravity_forces
         return lin_force
-
-    def get_torque(self, propeller_rot_speed):
-        squared_rot_speed1 = propeller_rot_speed[0] ** 2
-        squared_rot_speed2 = propeller_rot_speed[1] ** 2
-        squared_rot_speed3 = propeller_rot_speed[2] ** 2
-        squared_rot_speed4 = propeller_rot_speed[3] ** 2
-        phi = self.L * self.k * (squared_rot_speed1 - squared_rot_speed3)
-        theta = self.L * self.k * (squared_rot_speed2 - squared_rot_speed4)
-        psi = self.b * (squared_rot_speed1 - squared_rot_speed2 + squared_rot_speed3 - squared_rot_speed4)
-        return [phi, theta, psi]
-
-
-    def increment_state(self, state, incerement):
-        return np.add(state, self.dt * np.array(incerement))
 
 
 
