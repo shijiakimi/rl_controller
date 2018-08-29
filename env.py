@@ -7,7 +7,7 @@ import math
 class ArmEnv(object):
     #viewer = None
     dt = .05
-    action_bound = [0, 50]
+    action_bound = [50, 100]
     goal = {'x': 100, 'y': 100, 'z': 100, 'l': 10}
     state_dim = 7
     action_dim = 4
