@@ -64,6 +64,7 @@ class ArmEnv(object):
 
 
         linear_acc = self.linear_acc(action)
+        print linear_acc
         d_w = self.angular_acc(action)
         self.uav_w = np.add(self.uav_w, self.dt * np.array(d_w))
         d_euler = self.angular_vel_to_d_angles()
