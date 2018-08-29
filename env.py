@@ -8,7 +8,7 @@ class ArmEnv(object):
     #viewer = None
     dt = .05
     action_bound = [0, 50]
-    goal = {'x': 50., 'y': 50., 'z': 50, 'l': 10}
+    goal = {'x': 100, 'y': 100, 'z': 100, 'l': 10}
     state_dim = 7
     action_dim = 4
     inertia_mat = [[0.005, 0., 0.], [0., 0.005, 0.], [0., 0., 0.001]]
