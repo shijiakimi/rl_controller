@@ -132,7 +132,7 @@ class ArmEnv(object):
 
     def linear_acc(self, action):
         R = self.angles_to_R(self.uav_euler)
-        print R
+        print self.uav_euler, R
         T_body = self.get_thrust(action)
         T_inertia = list(np.dot(R, T_body))
         T_inertia = [1.0/self.mass * T for T in T_inertia]
