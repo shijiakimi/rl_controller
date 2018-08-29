@@ -64,13 +64,19 @@ class ArmEnv(object):
 
 
         linear_acc = self.linear_acc(action)
+        print 'linear_acc', linear_acc
         d_w = self.angular_acc(action)
+        print 'dw', d_w
         self.uav_w = np.add(self.uav_w, self.dt * np.array(d_w))
-        print self.uav_w
+        print 'w', self.uav_w
         d_euler = self.angular_vel_to_d_angles()
+        print 'd_euler', d_euler
         self.uav_euler = self.increment_state(self.uav_euler, d_euler)
+        print 'uav_euler', self.uav_euler
         self.uav_v = self.increment_state(self.uav_v, linear_acc)
+        print 'uav_v', self.uav_v
         self.uav_pos = self.increment_state(self.uav_pos, self.uav_v)
+        print 'uav_pos', self.uav_pos
 
 
 
@@ -118,7 +124,7 @@ class ArmEnv(object):
         trans_mat = [[1, 0, -math.sin(theta)],
                      [0, math.cos(phi), math.cos(theta) * math.sin(phi)],
                      [0, -math.sin(phi), math.cos(theta) * math.cos(phi)]]
-        print trans_mat, np.linalg.inv(trans_mat)
+        #print trans_mat, np.linalg.inv(trans_mat)
         return list(np.dot(np.linalg.inv(trans_mat), self.uav_w))
 
 
