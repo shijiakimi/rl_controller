@@ -5,7 +5,8 @@ import math
 # adjacent propellers are oriented opposite each other
 class ArmEnv(object):
     dt = .02
-    action_bound = [0, 1000]
+    action_bound = [0, 1]
+    action_clip = [0, 1000]
     goal = {'x': 100, 'y': 100, 'z': 100, 'l': 10}
     state_dim = 7
     action_dim = 4
@@ -36,6 +37,7 @@ class ArmEnv(object):
 
     def step(self, action):
         done = False
+        action = np.clip(action, *self.action_clip)
         self.get_prop_wind_speed()
         thrusts = self.get_thrust(action)
         linear_acc = self.get_linear_forces(thrusts) / self.mass

@@ -3,7 +3,7 @@ Make it more robust.
 Stop episode once the finger stop at the final position for 50 steps.
 Feature & reward engineering.
 """
-from env import ArmEnv
+from env1 import ArmEnv
 from rl import DDPG
 import matplotlib.pyplot as plt
 from noise import noise
