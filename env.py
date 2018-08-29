@@ -66,8 +66,8 @@ class ArmEnv(object):
         linear_acc = self.linear_acc(action)
         d_w = self.angular_acc(action)
         self.uav_w = np.add(self.uav_w, self.dt * np.array(d_w))
+        print self.uav_w
         d_euler = self.angular_vel_to_d_angles()
-        print d_euler
         self.uav_euler = self.increment_state(self.uav_euler, d_euler)
         self.uav_v = self.increment_state(self.uav_v, linear_acc)
         self.uav_pos = self.increment_state(self.uav_pos, self.uav_v)
