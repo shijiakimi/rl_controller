@@ -54,7 +54,7 @@ def train():
             s = s_
 
             if done or j == MAX_EP_STEPS-1:
-                print('Ep: %i | %s | ep_r: %.1f | step: %i | position: %i, %i, %i' % (i, '---' if not done else 'done', ep_r, j, env.uav_pos[0], env.uav_pos[1], env.uav_pos[2]))
+                print('Ep: %i | %s | ep_r: %.1f | step: %i | position: %i, %i, %i' % (i, '---' if not done else 'done', ep_r, j, int(env.uav_pos[0]), int(env.uav_pos[1]), int(env.uav_pos[2])))
                 break
     #j += 1
     #plt.plot(x,range(MAX_EPISODES))
