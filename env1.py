@@ -138,7 +138,7 @@ class ArmEnv(object):
         thrust_body_force = np.array([0.,0.,sum(thrusts)])
         drag_body_force = 0.5 * self.rho * self.ground_v_to_body_v() ** 2 * self.areas * self.C_d
         if np.isnan(drag_body_force[0]):
-            print self.ground_v_to_body_v(), thrusts
+            print self.uav_v, thrusts
         body_force = thrust_body_force - drag_body_force
         RT = np.transpose(self.angles_to_R(self.uav_euler))
         lin_force = np.dot(RT, body_force)
