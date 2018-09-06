@@ -8,7 +8,7 @@ class ArmEnv(object):
     action_bound = [0, 1000]
     action_clip = [0, 1000]
     goal = {'x': 2, 'y': 2, 'z': 2, 'l': 0.1}
-    state_dim = 7
+    state_dim = 10
     action_dim = 4
     gravity = np.array([0., 0., -9.81])
     mass = 0.985
@@ -75,7 +75,7 @@ class ArmEnv(object):
                         done = True
         else:
             self.on_goal = 0
-        s = np.concatenate((self.uav_pos, dist1, [1. if self.on_goal else 0.]))
+        s = np.concatenate((self.uav_pos, self.uav_euler, dist1, [1. if self.on_goal else 0.]))
         #print 'pos: ', self.uav_pos
         return s, r, done
 
@@ -147,13 +147,13 @@ class ArmEnv(object):
 
     def reset(self):
         self.uav_euler = np.zeros(3)
-        self.uav_pos = 2 * np.random.rand(3)
+        self.uav_pos = 1.0 * np.random.rand(3)
         self.uav_v = np.zeros(3)
         self.uav_w = np.zeros(3)
         self.prop_wind_speed = np.zeros(4)
         self.on_goal = 0
         dist1 = [(self.goal['x'] - self.uav_pos[0]), (self.goal['y'] - self.uav_pos[1]), (self.goal['z'] - self.uav_pos[2])]
-        s = np.concatenate((self.uav_pos, dist1, [1. if self.on_goal else 0.]))
+        s = np.concatenate((self.uav_pos, self.uav_euler, dist1, [1. if self.on_goal else 0.]))
         return s
 
 
