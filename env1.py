@@ -121,7 +121,7 @@ class ArmEnv(object):
         for idx in range(4):
             V = self.prop_wind_speed[idx]
             n = propeller_rot_speed[idx]
-            J = V / (n+0.0001) * self.propeller_size
+            J = V / (n) * self.propeller_size
             C_T = max(0, .12 - .07 * max(0, J) - .1 * max(0, J))
             thrusts.append(C_T * self.rho * n **2 * self.propeller_size **4)
 
