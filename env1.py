@@ -45,7 +45,7 @@ class ArmEnv(object):
         #print 'thrust', thrusts
         linear_acc = self.get_linear_forces(thrusts) / self.mass
         print 'linear_acc', linear_acc
-        self.uav_pos += self.uav_v * self.dt * 0.5 * linear_acc * self.dt ** 2
+        self.uav_pos += self.uav_v * self.dt + 0.5 * linear_acc * self.dt ** 2
         #print 'pos', self.uav_pos
         self.uav_v += linear_acc * self.dt
 
