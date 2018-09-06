@@ -5,8 +5,8 @@ import math
 # adjacent propellers are oriented opposite each other
 class ArmEnv(object):
     dt = .02
-    action_bound = [0, 1000]
-    action_clip = [0, 1000]
+    action_bound = [0, 500]
+    action_clip = [0, 500]
     goal = {'x': 5, 'y': 5, 'z': 5, 'l': 0.2}
     state_dim = 10
     action_dim = 4
