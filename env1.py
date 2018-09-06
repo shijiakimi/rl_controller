@@ -7,7 +7,7 @@ class ArmEnv(object):
     dt = .02
     action_bound = [0, 1000]
     action_clip = [0, 1000]
-    goal = {'x': 10, 'y': 10, 'z': 10, 'l': 1}
+    goal = {'x': 5, 'y': 5, 'z': 5, 'l': 0.2}
     state_dim = 10
     action_dim = 4
     gravity = np.array([0., 0., -9.81])
@@ -63,7 +63,7 @@ class ArmEnv(object):
 
         dist1 = [(self.goal['x'] - self.uav_pos[0]), (self.goal['y'] - self.uav_pos[1]), (self.goal['z'] - self.uav_pos[2])]
         r = np.tanh(1 - 0.02 * (abs(dist1[0]) + abs(dist1[1]) + abs(dist1[2])))
-        if self.uav_pos[0] > 100 or self.uav_pos[1] > 100 or self.uav_pos[2] > 100 or self.uav_pos[0] < 0 or self.uav_pos[1] < 0 or self.uav_pos[2] < 0:
+        if self.uav_pos[0] > 2*self.goal['x'] or self.uav_pos[1] > 2*self.goal['y'] or self.uav_pos[2] > 2*self.goal['z'] or self.uav_pos[0] < 0 or self.uav_pos[1] < 0 or self.uav_pos[2] < 0:
             r -= 10
         # done and reward
         if self.goal['x'] - self.goal['l']/2 < self.uav_pos[0] < self.goal['x'] + self.goal['l']/2:
