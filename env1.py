@@ -7,7 +7,7 @@ class ArmEnv(object):
     dt = .02
     action_bound = [0, 1000]
     action_clip = [0, 1000]
-    goal = {'x': 2, 'y': 2, 'z': 2, 'l': 0.1}
+    goal = {'x': 20, 'y': 20, 'z': 20, 'l': 1}
     state_dim = 10
     action_dim = 4
     gravity = np.array([0., 0., -9.81])
