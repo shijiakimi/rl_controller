@@ -4,7 +4,7 @@ import math
 # roll, pitch, yaw = theta = [phi, theta, psi]
 # adjacent propellers are oriented opposite each other
 class ArmEnv(object):
-    dt = .02
+    dt = .5
     action_bound = [0, 1000]
     action_clip = [0, 1000]
     goal = {'x': 20, 'y': 20, 'z': 20, 'l': 1}
