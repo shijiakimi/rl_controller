@@ -88,14 +88,14 @@ class DDPG(object):
 
     def _build_a(self, s, scope, trainable):
         with tf.variable_scope(scope):
-            net = tf.layers.dense(s, 100, activation=tf.nn.relu, name='l1', trainable=trainable)
-            net1 = tf.layers.dense(net,100, activation = tf.nn.relu, name = 'l2', trainable = trainable)
+            net = tf.layers.dense(s, 300, activation=tf.nn.relu, name='l1', trainable=trainable)
+            net1 = tf.layers.dense(net,300, activation = tf.nn.relu, name = 'l2', trainable = trainable)
             a = tf.layers.dense(net1, self.a_dim, activation=tf.nn.tanh, name='a', trainable=trainable)
             return tf.multiply(a, self.a_bound, name='scaled_a')
 
     def _build_c(self, s, a, scope, trainable):
         with tf.variable_scope(scope):
-            n_l1 = 100
+            n_l1 = 300
             w1_s = tf.get_variable('w1_s', [self.s_dim, n_l1], trainable=trainable)
             w1_a = tf.get_variable('w1_a', [self.a_dim, n_l1], trainable=trainable)
             b1 = tf.get_variable('b1', [1, n_l1], trainable=trainable)
