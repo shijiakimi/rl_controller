@@ -30,8 +30,8 @@ class DDPG(object):
         #self.action_bound = [50, 50, 50, 50]
 
         with tf.variable_scope('Actor'):
-            unbounded_a = self._build_a(self.S, scope='eval', trainable=True)
-            self.a = tf.multiply(unbounded_a, self.a_bound)
+            self.a = self._build_a(self.S, scope='eval', trainable=True)
+            #self.a= tf.multiply(unbounded_a, self.a_bound)
             a_ = self._build_a(self.S_, scope='target', trainable=False)
         with tf.variable_scope('Critic'):
             # assign self.a = a in memory when calculating q for td_error,
