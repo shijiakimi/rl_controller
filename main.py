@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from noise import noise
 
 MAX_EPISODES = 1000
-MAX_EP_STEPS = 100
+MAX_EP_STEPS = 50
 ON_TRAIN = True
 
 # set env
@@ -19,7 +19,7 @@ a_dim = env.action_dim
 a_bound = env.action_bound
 
 # set RL method (continuous)
-a_scale = 500
+a_scale = 1
 rl = DDPG(a_dim, s_dim, a_scale)
 
 
