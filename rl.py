@@ -14,14 +14,14 @@ BATCH_SIZE = 64
 
 
 class DDPG(object):
-    def __init__(self, a_dim, s_dim, a_bound,):
+    def __init__(self, a_dim, s_dim, a_scale,):
         self.memory = np.zeros((MEMORY_CAPACITY, s_dim * 2 + a_dim + 1), dtype=np.float32)
         self.pointer = 0
         self.memory_full = False
         self.sess = tf.Session()
         self.a_replace_counter, self.c_replace_counter = 0, 0
 
-        self.a_dim, self.s_dim, self.a_bound = a_dim, s_dim, a_bound[1]
+        self.a_dim, self.s_dim, self.a_bound = a_dim, s_dim, a_scale
         self.S = tf.placeholder(tf.float32, [None, s_dim], 's')
         self.S_ = tf.placeholder(tf.float32, [None, s_dim], 's_')
         self.R = tf.placeholder(tf.float32, [None, 1], 'r')

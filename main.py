@@ -19,7 +19,8 @@ a_dim = env.action_dim
 a_bound = env.action_bound
 
 # set RL method (continuous)
-rl = DDPG(a_dim, s_dim, a_bound)
+a_scale = 1
+rl = DDPG(a_dim, s_dim, a_scale)
 
 
 noise_mean = 0
