@@ -6,7 +6,7 @@ import math
 class ArmEnv(object):
     dt = .02
     action_bound = [0, 1]
-    action_clip = [0, 30000]
+    action_clip = [0, 10000]
     goal = {'x': 5, 'y': 5, 'z': 5, 'l': 0.2}
     state_dim = 10
     action_dim = 4
@@ -38,7 +38,7 @@ class ArmEnv(object):
 
     def step(self, action):
         done = False
-        #action = np.clip(action, *self.action_clip)
+        action = np.clip(action, *self.action_clip)
         #print 'action', action
         self.get_prop_wind_speed()
         thrusts = self.get_thrust(action)
