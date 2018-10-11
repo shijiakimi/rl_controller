@@ -6,8 +6,8 @@ import math
 class ArmEnv(object):
     dt = .02
     action_bound = [0, 1]
-    action_clip = [0, 10000]
-    goal = {'x': 50, 'y': 50, 'z': 50, 'l': 2}
+    action_clip = [1, 3000]
+    goal = {'x': 20, 'y': 20, 'z': 20, 'l': 1}
     state_dim = 10
     action_dim = 4
     gravity = np.array([0., 0., -9.81])
