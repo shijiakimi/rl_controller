@@ -8,8 +8,8 @@ from rl import DDPG
 import matplotlib.pyplot as plt
 from noise import noise
 
-MAX_EPISODES = 1000
-MAX_EP_STEPS = 25
+MAX_EPISODES = 1500
+MAX_EP_STEPS = 50
 ON_TRAIN = True
 
 # set env
@@ -44,7 +44,8 @@ def train():
             a = rl.choose_action(s) + noise.sample_noise()
 
             s_, r, done = env.step(a)
-
+            if(abs(s_[6]) > env.goal['x'] or s_[7] > env.goal['y'] or s_[8] > env.goal['z']):
+                continue
             rl.store_transition(s, a, r, s_)
 
             ep_r += r
