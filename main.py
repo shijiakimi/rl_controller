@@ -52,7 +52,7 @@ def train():
             ep_r += r
             if rl.memory_full:
                 # start to learn once has fulfilled the memory
-                print "rl.learn"
+                # print "rl.learn"
                 rl.learn()
 
             s = s_
