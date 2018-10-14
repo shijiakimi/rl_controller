@@ -6,7 +6,7 @@ import math
 class ArmEnv(object):
     dt = .02
     action_bound = [0, 1]
-    action_clip = [1, 3000]
+    action_clip = [1, 5000]
     goal = {'x': 0.5, 'y': 0.5, 'z': 5, 'l': 0.02}
     state_dim = 10
     action_dim = 4
