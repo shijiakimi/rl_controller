@@ -14,14 +14,14 @@ BATCH_SIZE = 32
 
 
 class DDPG(object):
-    def __init__(self, a_dim, s_dim, a_scale,):
+    def __init__(self, a_dim, s_dim, a_bound,):
         self.memory = np.zeros((MEMORY_CAPACITY, s_dim * 2 + a_dim + 1), dtype=np.float32)
         self.pointer = 0
         self.memory_full = False
         self.sess = tf.Session()
         self.a_replace_counter, self.c_replace_counter = 0, 0
 
-        self.a_dim, self.s_dim, self.a_bound = a_dim, s_dim, a_scale
+        self.a_dim, self.s_dim, self.a_bound = a_dim, s_dim, a_bound
         self.S = tf.placeholder(tf.float32, [None, s_dim], 's')
         self.S_ = tf.placeholder(tf.float32, [None, s_dim], 's_')
         self.R = tf.placeholder(tf.float32, [None, 1], 'r')
@@ -91,7 +91,8 @@ class DDPG(object):
             net = tf.layers.dense(s, 64, activation=tf.nn.tanh, name='l1', trainable=trainable)
             net1 = tf.layers.dense(net,64, activation = tf.nn.tanh, name = 'l2', trainable = trainable)
             a = tf.layers.dense(net1, self.a_dim, activation=tf.nn.relu, name='a', trainable=trainable)
-            return tf.multiply(a, self.a_bound, name='scaled_a')
+            bounded_a = self.a_bound[0] + tf.nn.sigmoid(a) * (self.a_bound[1] - self.a_bound[0])
+            return bounded_a
 
     def _build_c(self, s, a, scope, trainable):
         with tf.variable_scope(scope):
