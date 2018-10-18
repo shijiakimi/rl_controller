@@ -63,7 +63,7 @@ class ArmEnv(object):
 
         dist1 = [(self.goal['x'] - self.uav_pos[0]), (self.goal['y'] - self.uav_pos[1]), (self.goal['z'] - self.uav_pos[2])]
         #r = -math.sqrt(dist1[0] ** 2) - math.sqrt(dist1[1] ** 2) - math.sqrt(dist1[2] ** 2)
-        r = -abs(dist1[0]) - abs(dist1[1]) - abs(dist1[2])
+        r = - abs(dist1[2])
         #r = np.tanh(1-1.0/15 * (abs(dist1[0]) + abs(dist1[1]) + abs(dist1[2])))
         #r = np.tanh(1-1.0/50 * (abs(dist1[0]) + abs(dist1[1])))
         #r = np.tanh(1 - 1.0/(self.goal['x'] + self.goal['y'] + self.goal['z']) * (abs(dist1[0]) + abs(dist1[1]) + abs(dist1[2])))
