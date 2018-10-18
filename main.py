@@ -42,7 +42,7 @@ def train():
             #env.render()
 
             a = rl.choose_action(s)
-            #print "action: ", a
+            print "action: ", a
             n = noise.sample_noise()
             #print n
             a = a + n
