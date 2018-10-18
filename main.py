@@ -42,9 +42,9 @@ def train():
             #env.render()
 
             a = rl.choose_action(s)
-            print "action: ", a
+            #print "action: ", a
             n = noise.sample_noise()
-            print n
+            #print n
             a = a + n
             s_, r, done = env.step(a)
             #if(abs(s_[6]) > env.goal['x'] or s_[7] > env.goal['y'] or s_[8] > env.goal['z']):
