@@ -53,11 +53,11 @@ class DDPG(object):
         # in the feed_dic for the td_error, the self.a should change to actions in memory
         td_error = tf.losses.mean_squared_error(labels=q_target, predictions=q)
         self.ctrain = tf.train.AdamOptimizer(LR_C).minimize(td_error, var_list=self.ce_params)
-        #self.a_grads = tf.gradients(q, self.a)[0]
-        #self.actor_grads = tf.gradients(self.a, self.ae_params, -self.a_grads)
-        a_loss = - tf.reduce_mean(q)    # maximize the q
-        #self.atrain = tf.train.AdamOptimizer(LR_A).apply_gradients(zip(self.actor_grads, self.ae_params))
-        self.atrain = tf.train.AdamOptimizer(LR_A).minimize(a_loss, var_list=self.ae_params)
+        self.a_grads = tf.gradients(q, self.a)[0]
+        self.actor_grads = tf.gradients(self.a, self.ae_params, -self.a_grads)
+        #a_loss = - tf.reduce_mean(q)    # maximize the q
+        self.atrain = tf.train.AdamOptimizer(LR_A).apply_gradients(zip(self.actor_grads, self.ae_params))
+        #self.atrain = tf.train.AdamOptimizer(LR_A).minimize(a_loss, var_list=self.ae_params)
         self.sess.run(tf.global_variables_initializer())
 
     def choose_action(self, s):
