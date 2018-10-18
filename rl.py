@@ -88,8 +88,8 @@ class DDPG(object):
 
     def _build_a(self, s, scope, trainable):
         with tf.variable_scope(scope):
-            net = tf.layers.dense(s, 36, activation=tf.nn.relu, name='l1', trainable=trainable)
-            net1 = tf.layers.dense(net,36, activation = tf.nn.relu, name = 'l2', trainable = trainable)
+            net = tf.layers.dense(s, 36, activation=tf.nn.tanh, name='l1', trainable=trainable)
+            net1 = tf.layers.dense(net,36, activation = tf.nn.tanh, name = 'l2', trainable = trainable)
             a = tf.layers.dense(net1, self.a_dim, activation=tf.nn.relu, name='a', trainable=trainable)
             return tf.multiply(a, self.a_bound, name='scaled_a')
 
@@ -99,7 +99,7 @@ class DDPG(object):
             w1_s = tf.get_variable('w1_s', [self.s_dim, n_l1], trainable=trainable)
             w1_a = tf.get_variable('w1_a', [self.a_dim, n_l1], trainable=trainable)
             b1 = tf.get_variable('b1', [1, n_l1], trainable=trainable)
-            net = tf.nn.relu(tf.matmul(s, w1_s) + tf.matmul(a, w1_a) + b1)
+            net = tf.nn.tanh(tf.matmul(s, w1_s) + tf.matmul(a, w1_a) + b1)
             net1 = tf.layers.dense(net, n_l1, activation=tf.nn.relu, name = 'net1', trainable = trainable)
             return tf.layers.dense(net1, 1, trainable=trainable)  # Q(s,a)
 
