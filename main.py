@@ -24,8 +24,8 @@ rl = DDPG(a_dim, s_dim, a_scale)
 
 
 noise_mean = 0
-noise_std_dev = 2
-noise_theta = 0.5
+noise_std_dev = 0.2
+noise_theta = 0.15
 noise = noise(a_dim, noise_mean, noise_std_dev, noise_theta)
 steps = []
 def train():
@@ -42,7 +42,7 @@ def train():
             #env.render()
 
             a = rl.choose_action(s)
-            print "action: ", a
+            #print "action: ", a
             n = noise.sample_noise()
             #print n
             a = a + n
