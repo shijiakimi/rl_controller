@@ -7,7 +7,7 @@ class ArmEnv(object):
     dt = .02
     action_bound = [0, 1]
     action_clip = [1, 5000]
-    goal = {'x': 0.5, 'y': 0.5, 'z': 5, 'l': 0.02}
+    goal = {'x': 50, 'y': 50, 'z': 50, 'l': 2}
     state_dim = 10
     action_dim = 4
     gravity = np.array([0., 0., -9.81])
@@ -62,7 +62,7 @@ class ArmEnv(object):
 
 
         dist1 = [(self.goal['x'] - self.uav_pos[0]), (self.goal['y'] - self.uav_pos[1]), (self.goal['z'] - self.uav_pos[2])]
-        r = -math.sqrt(dist1[0] ** 2 + dist1[1] ** 2 + dist1[2] ** 2)
+        r = -math.sqrt(dist1[0] ** 2) - math.sqrt(dist1[1] ** 2) - math.sqrt(dist1[2] ** 2)
         #r = np.tanh(1-1.0/15 * (abs(dist1[0]) + abs(dist1[1]) + abs(dist1[2])))
         #r = np.tanh(1-1.0/50 * (abs(dist1[0]) + abs(dist1[1])))
         #r = np.tanh(1 - 1.0/(self.goal['x'] + self.goal['y'] + self.goal['z']) * (abs(dist1[0]) + abs(dist1[1]) + abs(dist1[2])))
