@@ -38,7 +38,7 @@ class ArmEnv(object):
 
     def step(self, action):
         done = False
-        action = np.clip(action, self.action_clip[0], self.action_clip[1])
+        #action = np.clip(action, self.action_clip[0], self.action_clip[1])
         print 'action', action
         self.get_prop_wind_speed()
         thrusts = self.get_thrust(action)
@@ -62,7 +62,7 @@ class ArmEnv(object):
 
 
         dist1 = [(self.goal['x'] - self.uav_pos[0]), (self.goal['y'] - self.uav_pos[1]), (self.goal['z'] - self.uav_pos[2])]
-        r = -math.sqrt(dist1[0] ** 2 + dist1[1] ** 2)
+        r = -math.sqrt(dist1[0] ** 2 + dist1[1] ** 2 + dist1[2] ** 2)
         #r = np.tanh(1-1.0/15 * (abs(dist1[0]) + abs(dist1[1]) + abs(dist1[2])))
         #r = np.tanh(1-1.0/50 * (abs(dist1[0]) + abs(dist1[1])))
         #r = np.tanh(1 - 1.0/(self.goal['x'] + self.goal['y'] + self.goal['z']) * (abs(dist1[0]) + abs(dist1[1]) + abs(dist1[2])))
@@ -71,11 +71,11 @@ class ArmEnv(object):
         # done and reward
         if self.goal['x'] - self.goal['l']/2 < self.uav_pos[0] < self.goal['x'] + self.goal['l']/2:
             if self.goal['y'] - self.goal['l']/2 < self.uav_pos[1] < self.goal['y'] + self.goal['l']/2:
-                #if self.goal['z'] - self.goal['l']/2 < self.uav_pos[2] < self.goal['z'] + self.goal['l']/2:
+                if self.goal['z'] - self.goal['l']/2 < self.uav_pos[2] < self.goal['z'] + self.goal['l']/2:
                 #r += 10
-                self.on_goal += 1
-                if self.on_goal > 2:
-                    done = True
+                    self.on_goal += 1
+                    if self.on_goal > 2:
+                        done = True
         else:
             self.on_goal = 0
         s = np.concatenate((self.uav_pos, self.uav_euler, dist1, [1. if self.on_goal else 0.]))
