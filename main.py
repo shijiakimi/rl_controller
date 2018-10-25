@@ -8,7 +8,7 @@ from rl import DDPG
 import matplotlib.pyplot as plt
 from noise import noise
 
-MAX_EPISODES = 1500
+MAX_EPISODES = 3000
 MAX_EP_STEPS = 30
 ON_TRAIN = True
 
