@@ -76,7 +76,7 @@ class ArmEnv(object):
         #    r -= 10
         # done and reward
         if 0 > self.uav_pos[2] or self.uav_pos[2] > 2 *  self.goal['z']:
-            r -= 30
+            r -= 300
         if self.goal['x'] - self.goal['l']/2 < self.uav_pos[0] < self.goal['x'] + self.goal['l']/2:
             if self.goal['y'] - self.goal['l']/2 < self.uav_pos[1] < self.goal['y'] + self.goal['l']/2:
                 if self.goal['z'] - self.goal['l']/2 < self.uav_pos[2] < self.goal['z'] + self.goal['l']/2:
