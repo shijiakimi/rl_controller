@@ -7,7 +7,7 @@ class ArmEnv(object):
     dt = .02
     action_bound = [0, 1]
     action_clip = [1, 5000]
-    goal = {'x': 0, 'y': 0, 'z': 5, 'l': 0.2}
+    goal = {'x': 0, 'y': 0, 'z': 5, 'l': 0.1}
     state_dim = 10
     action_dim = 4
     gravity = np.array([0., 0., -9.81])
@@ -83,7 +83,10 @@ class ArmEnv(object):
                     if self.on_goal > 15:
                         done = True
         else:
-            self.on_goal = 0
+            if self.on_goal > 0:
+                self.on_goal -= 1
+        if done:
+            r += 100
         s = np.concatenate((self.uav_pos, self.uav_euler, dist1, [1. if self.on_goal else 0.]))
         #print 'pos: ', self.uav_pos
         return s, r, done
