@@ -24,7 +24,7 @@ rl = DDPG(a_dim, s_dim, a_scale)
 
 
 noise_mean = 0
-noise_std_dev = 0.2
+noise_std_dev = 0.3
 noise_theta = 0.15
 noise = noise(a_dim, noise_mean, noise_std_dev, noise_theta)
 steps = []
@@ -49,8 +49,8 @@ def train():
             s_, r, done = env.step(a)
             #if(abs(s_[6]) > env.goal['x'] or s_[7] > env.goal['y'] or s_[8] > env.goal['z']):
                 #continue
-            #if(abs(s_[6]) < env.goal['x'] and abs(s_[7]) < env.goal['y'] and abs(s_[8]) < env.goal['z']):
-            rl.store_transition(s, a, r, s_)
+            if(abs(s_[8]) < 2 * (env.goal['z'] + env.goal['l'])):
+                rl.store_transition(s, a, r, s_)
 
             ep_r += r
             if rl.memory_full:
