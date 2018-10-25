@@ -71,15 +71,15 @@ class ArmEnv(object):
         r = -rp - rv - rw
         #r = np.tanh(1-1.0/50 * (abs(dist1[0]) + abs(dist1[1])))
         #r = np.tanh(1 - 1.0/(self.goal['x'] + self.goal['y'] + self.goal['z']) * (abs(dist1[0]) + abs(dist1[1]) + abs(dist1[2])))
-        if self.uav_pos[0] > 2*self.goal['x'] or self.uav_pos[1] > 2*self.goal['y'] or self.uav_pos[2] > 2*self.goal['z'] or self.uav_pos[0] < 0 or self.uav_pos[1] < 0 or self.uav_pos[2] < 0:
-            r -= 10
+        #if self.uav_pos[0] > 2*self.goal['x'] or self.uav_pos[1] > 2*self.goal['y'] or self.uav_pos[2] > 2*self.goal['z'] or self.uav_pos[0] < 0 or self.uav_pos[1] < 0 or self.uav_pos[2] < 0:
+        #    r -= 10
         # done and reward
         if self.goal['x'] - self.goal['l']/2 < self.uav_pos[0] < self.goal['x'] + self.goal['l']/2:
             if self.goal['y'] - self.goal['l']/2 < self.uav_pos[1] < self.goal['y'] + self.goal['l']/2:
                 if self.goal['z'] - self.goal['l']/2 < self.uav_pos[2] < self.goal['z'] + self.goal['l']/2:
                 #r += 10
                     self.on_goal += 1
-                    if self.on_goal > 2:
+                    if self.on_goal > 15:
                         done = True
         else:
             self.on_goal = 0
