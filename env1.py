@@ -63,13 +63,13 @@ class ArmEnv(object):
 
         dist1 = [(self.goal['x'] - self.uav_pos[0]), (self.goal['y'] - self.uav_pos[1]), (self.goal['z'] - self.uav_pos[2])]
         #r = -math.sqrt(dist1[0] ** 2) - math.sqrt(dist1[1] ** 2) - math.sqrt(dist1[2] ** 2)
-        #r = - abs(dist1[2]) - abs(dist1[1]) - abs(dist1[0])
+        r = - abs(dist1[2]) - abs(dist1[1]) - abs(dist1[0])
         #r = np.tanh(1-1.0/50 * (abs(dist1[0]) + abs(dist1[1]) + abs(dist1[2])))
         #rp = 0.004 * math.sqrt(dist1[0]**2 + dist1[1]**2 + dist1[2]**2)
         #rv = 0.0005 * math.sqrt(self.uav_v[0]**2 + self.uav_v[1]**2 + self.uav_v[2]**2)
         #rw = 0.0003 * math.sqrt(self.uav_w[0] ** 2 + self.uav_w[1] ** 2 + self.uav_w[2] ** 2)
         #r = -rp - rv - rw
-        r = -abs(self.uav_pos[2] - self.goal['z'])
+        #r = -abs(self.uav_pos[2] - self.goal['z'])
         #r = np.tanh(1-1.0/50 * (abs(dist1[0]) + abs(dist1[1])))
         #r = np.tanh(1 - 1.0/(self.goal['x'] + self.goal['y'] + self.goal['z']) * (abs(dist1[0]) + abs(dist1[1]) + abs(dist1[2])))
         #if self.uav_pos[0] > 2*self.goal['x'] or self.uav_pos[1] > 2*self.goal['y'] or self.uav_pos[2] > 2*self.goal['z'] or self.uav_pos[0] < 0 or self.uav_pos[1] < 0 or self.uav_pos[2] < 0:
@@ -78,7 +78,7 @@ class ArmEnv(object):
         if self.goal['x'] - self.goal['l']/2 < self.uav_pos[0] < self.goal['x'] + self.goal['l']/2:
             if self.goal['y'] - self.goal['l']/2 < self.uav_pos[1] < self.goal['y'] + self.goal['l']/2:
                 if self.goal['z'] - self.goal['l']/2 < self.uav_pos[2] < self.goal['z'] + self.goal['l']/2:
-                    r += 5
+                    r += 10
                     self.on_goal += 1
                     if self.on_goal > 15:
                         done = True
@@ -86,7 +86,7 @@ class ArmEnv(object):
             if self.on_goal > 0:
                 self.on_goal -= 1
         if done:
-            r += 100
+            r += 1000
         s = np.concatenate((self.uav_pos, self.uav_euler, dist1, [1. if self.on_goal else 0.]))
         #print 'pos: ', self.uav_pos
         return s, r, done
