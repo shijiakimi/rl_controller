@@ -50,7 +50,7 @@ def train():
             #if(abs(s_[6]) > env.goal['x'] or s_[7] > env.goal['y'] or s_[8] > env.goal['z']):
                 #continue
             #if(abs(s_[8]) < 2 * (env.goal['z'] + env.goal['l'])):
-            #    rl.store_transition(s, a, r, s_)
+            rl.store_transition(s, a, r, s_)
 
             ep_r += r
             if rl.memory_full:
