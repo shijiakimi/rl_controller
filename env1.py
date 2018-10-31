@@ -36,11 +36,11 @@ class ArmEnv(object):
         self.prop_wind_speed = np.zeros(4)
         self.on_goal = 0
 
-    def step(self, action):
+    def step(self, action_):
         done = False
         #action = np.clip(action, self.action_clip[0], self.action_clip[1])
         #print 'action', action
-        #action = [action_[0]] * 4
+        action = [action_[0]] * 4
         self.get_prop_wind_speed()
         thrusts = self.get_thrust(action)
         #print 'thrust', thrusts
