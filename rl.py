@@ -9,8 +9,8 @@ LR_A = 0.001    # learning rate for actor
 LR_C = 0.001    # learning rate for critic
 GAMMA = 0.9     # reward discount
 TAU = 0.01      # soft replacement
-MEMORY_CAPACITY = 3000
-BATCH_SIZE = 32
+MEMORY_CAPACITY = 4000
+BATCH_SIZE = 64
 
 
 class DDPG(object):
