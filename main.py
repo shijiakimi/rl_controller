@@ -19,7 +19,8 @@ a_dim = env.action_dim
 a_bound = env.action_bound
 
 # set RL method (continuous)
-a_scale = [1000,3000]
+#a_scale = [1000,3000]
+a_scale = [0, 1]
 rl = DDPG(a_dim, s_dim, a_scale)
 
 
