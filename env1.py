@@ -58,10 +58,10 @@ class ArmEnv(object):
         self.uav_w += angular_acc * self.dt
 
         """
-        new_uav_v = self.uav_v + action
-        self.uav_pos = (new_uav_v ** 2 - self.uav_v ** 2) / (2 * self.dt)
-        self.uav_v = new_uav_v
-
+        #new_uav_v = self.uav_v + action
+        #self.uav_pos = (new_uav_v ** 2 - self.uav_v ** 2) / (2 * self.dt)
+        #self.uav_v = new_uav_v
+        self.uav_pos += action
 
 
 
