@@ -9,7 +9,7 @@ class ArmEnv(object):
     action_clip = [1, 5000]
     goal = {'x': 0, 'y': 0, 'z': 5, 'l': 0.1}
     state_dim = 10
-    action_dim = 4
+    action_dim = 1
     gravity = np.array([0., 0., -9.81])
     mass = 0.985
     rho = 1.2
@@ -40,6 +40,7 @@ class ArmEnv(object):
         done = False
         #action = np.clip(action, self.action_clip[0], self.action_clip[1])
         #print 'action', action
+        action = [action] * 4
         self.get_prop_wind_speed()
         thrusts = self.get_thrust(action)
         #print 'thrust', thrusts
@@ -63,8 +64,8 @@ class ArmEnv(object):
 
         dist1 = [(self.goal['x'] - self.uav_pos[0]), (self.goal['y'] - self.uav_pos[1]), (self.goal['z'] - self.uav_pos[2])]
         #r = -math.sqrt(dist1[0] ** 2) - math.sqrt(dist1[1] ** 2) - math.sqrt(dist1[2] ** 2)
-        r = - abs(dist1[2]) - abs(dist1[1]) - abs(dist1[0])
-        r /= 3
+        r = - abs(dist1[2])
+        #r /= 3
         #r = np.tanh(1-1.0/50 * (abs(dist1[0]) + abs(dist1[1]) + abs(dist1[2])))
         #rp = 0.004 * math.sqrt(dist1[0]**2 + dist1[1]**2 + dist1[2]**2)
         #rv = 0.0005 * math.sqrt(self.uav_v[0]**2 + self.uav_v[1]**2 + self.uav_v[2]**2)
@@ -76,8 +77,8 @@ class ArmEnv(object):
         #if self.uav_pos[0] > 2*self.goal['x'] or self.uav_pos[1] > 2*self.goal['y'] or self.uav_pos[2] > 2*self.goal['z'] or self.uav_pos[0] < 0 or self.uav_pos[1] < 0 or self.uav_pos[2] < 0:
         #    r -= 10
         # done and reward
-        if 0 > self.uav_pos[2] or self.uav_pos[2] > 2 *  self.goal['z']:
-            r -= 300
+        #if 0 > self.uav_pos[2] or self.uav_pos[2] > 2 *  self.goal['z']:
+        #    r -= 300
         if self.goal['x'] - self.goal['l']/2 < self.uav_pos[0] < self.goal['x'] + self.goal['l']/2:
             if self.goal['y'] - self.goal['l']/2 < self.uav_pos[1] < self.goal['y'] + self.goal['l']/2:
                 if self.goal['z'] - self.goal['l']/2 < self.uav_pos[2] < self.goal['z'] + self.goal['l']/2:
