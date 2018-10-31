@@ -49,12 +49,10 @@ class ArmEnv(object):
         self.uav_pos += self.uav_v * self.dt + 0.5 * linear_acc * self.dt ** 2
         #print 'pos', self.uav_pos
         self.uav_v += linear_acc * self.dt
-
+        print thrusts
         moments = self.get_moments(thrusts)
 
         angular_acc = moments / self.moments_of_inertia
-        print moments
-        print angular_acc
         self.uav_euler += self.uav_w * self.dt + 0.5 * angular_acc * self.dt ** 2
         self.uav_euler = (self.uav_euler + 2 * np.pi) % (2 * np.pi)
         self.uav_w += angular_acc * self.dt
