@@ -9,7 +9,7 @@ class ArmEnv(object):
     action_clip = [1, 5000]
     goal = {'x': 0, 'y': 0, 'z': 15, 'l': 0.5}
     state_dim = 10
-    action_dim = 1
+    action_dim = 3
     gravity = np.array([0., 0., -9.81])
     mass = 0.985
     rho = 1.2
@@ -36,10 +36,11 @@ class ArmEnv(object):
         self.prop_wind_speed = np.zeros(4)
         self.on_goal = 0
 
-    def step(self, action_):
+    def step(self, action):
         done = False
         #action = np.clip(action, self.action_clip[0], self.action_clip[1])
         #print 'action', action
+        """
         action = [action_[0]] * 4
         self.get_prop_wind_speed()
         thrusts = self.get_thrust(action)
@@ -55,6 +56,12 @@ class ArmEnv(object):
         self.uav_euler += self.uav_w * self.dt + 0.5 * angular_acc * self.dt ** 2
         self.uav_euler = (self.uav_euler + 2 * np.pi) % (2 * np.pi)
         self.uav_w += angular_acc * self.dt
+
+        """
+        new_uav_v = self.uav_v + action
+        self.uav_pos = (new_uav_v ** 2 - self.uav_v ** 2) / (2 * self.dt)
+        self.uav_v = new_uav_v
+
 
 
 
