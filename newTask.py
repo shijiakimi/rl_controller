@@ -74,8 +74,8 @@ class Task():
         return np.array([ position_error[2], self.sim.v[2], self.sim.linear_accel[2] ])
 
     def convert_action(self, action):
-        print (action, self.action_m, self.action_b)
-        return (action * self.action_m) + self.action_b
+        #print (action, self.action_m, self.action_b)
+        return (action[0] * self.action_m) + self.action_b
 
     def step(self, action):
         speed_of_rotors = self.convert_action(action)
