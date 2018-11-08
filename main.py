@@ -25,7 +25,7 @@ rl = DDPG(a_dim, s_dim, a_scale)
 
 
 noise_mean = 0
-noise_std_dev = 0.2
+noise_std_dev = 0.1
 noise_theta = 0.15
 noise_dt = env.dt
 noise = noise(a_dim, noise_mean, noise_std_dev, noise_theta, noise_dt)
