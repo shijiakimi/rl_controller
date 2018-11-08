@@ -35,6 +35,7 @@ class ArmEnv(object):
         self.uav_w = np.zeros(3)
         self.prop_wind_speed = np.zeros(4)
         self.on_goal = 0
+        self.time = 0
 
     def step(self, action):
         done = False
@@ -61,8 +62,8 @@ class ArmEnv(object):
         # new_uav_v = self.uav_v + action
         # self.uav_pos = (new_uav_v ** 2 - self.uav_v ** 2) / (2 * self.dt)
         # self.uav_v = new_uav_v
-        self.uav_pos += action
-
+        self.uav_pos += [0,0, action[0]]
+        self.time += self.dt
         dist1 = [(self.goal['x'] - self.uav_pos[0]), (self.goal['y'] - self.uav_pos[1]),
                  (self.goal['z'] - self.uav_pos[2])]
         # r = -math.sqrt(dist1[0] ** 2) - math.sqrt(dist1[1] ** 2) - math.sqrt(dist1[2] ** 2)
