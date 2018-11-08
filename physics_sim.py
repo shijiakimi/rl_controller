@@ -62,7 +62,7 @@ class PhysicsSim():
         self.done = False
 
     def find_body_velocity(self):
-        body_velocity = np.matmul(earth_to_body_frame(*list(self.pose[3:])), self.v)
+        body_velocity = np.matmul(earth_to_body_frame(self.pose[3],self.pose[4], self.pose[5]), self.v)
         return body_velocity
 
     def get_linear_drag(self):
