@@ -102,8 +102,9 @@ class ArmEnv(object):
         '''
         if self.goal['z'] <= self.uav_pos[2]:
             r += 10
+            self.on_goal += 1
+        if self.on_goal >= 10:
             done = True
-            self.on_goal = 1
         s = np.concatenate((self.uav_pos, self.uav_euler, dist1, [1. if self.on_goal else 0.]))
         #print 'pos: ', self.uav_pos
         return s, r, done
