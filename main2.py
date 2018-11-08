@@ -5,7 +5,7 @@ from newTask import Task
 
 max_episodes = 1000
 target_pos = np.array([0., 0., 15.])
-task = Task(target_pos=target_pos)
+task = Task(target_pos=target_pos, init_pose=[0., 0., 0.01])
 agent = DDPG(task)
 
 for i in range(max_episodes):
