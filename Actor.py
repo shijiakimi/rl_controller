@@ -1,5 +1,5 @@
 import numpy as np
-import tensorflow as tf
+#import tensorflow as tf
 
 #TF Imports
 from tensorflow.contrib.keras import layers, models, optimizers
