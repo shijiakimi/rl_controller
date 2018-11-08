@@ -74,6 +74,7 @@ class Task():
         return np.array([ position_error[2], self.sim.v[2], self.sim.linear_accel[2] ])
 
     def convert_action(self, action):
+        print (action)
         return (action * self.action_m) + self.action_b
 
     def step(self, action):
