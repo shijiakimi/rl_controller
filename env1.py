@@ -70,7 +70,8 @@ class ArmEnv(object):
 
         dist1 = [(self.goal['x'] - self.uav_pos[0]), (self.goal['y'] - self.uav_pos[1]), (self.goal['z'] - self.uav_pos[2])]
         #r = -math.sqrt(dist1[0] ** 2) - math.sqrt(dist1[1] ** 2) - math.sqrt(dist1[2] ** 2)
-        r = - abs(dist1[2]) - abs(dist1[1]) - abs(dist1[0])
+        #r = - abs(dist1[2]) - abs(dist1[1]) - abs(dist1[0])
+        r = -min(abs(self.goal['z'] - self.uav_pos[2]), 20.0)
         #r /= 3
         #r = np.tanh(1-1.0/50 * (abs(dist1[0]) + abs(dist1[1]) + abs(dist1[2])))
         #rp = 0.004 * math.sqrt(dist1[0]**2 + dist1[1]**2 + dist1[2]**2)
@@ -85,6 +86,7 @@ class ArmEnv(object):
         # done and reward
         #if 0 > self.uav_pos[2] or self.uav_pos[2] > 2 *  self.goal['z']:
         #    r -= 300
+        '''
         if self.goal['x'] - self.goal['l']/2 < self.uav_pos[0] < self.goal['x'] + self.goal['l']/2:
             if self.goal['y'] - self.goal['l']/2 < self.uav_pos[1] < self.goal['y'] + self.goal['l']/2:
                 if self.goal['z'] - self.goal['l']/2 < self.uav_pos[2] < self.goal['z'] + self.goal['l']/2:
@@ -97,6 +99,11 @@ class ArmEnv(object):
                 self.on_goal -= 1
         if done:
             r += 1000
+        '''
+        if self.goal['z'] <= self.uav_pos[2]:
+            r += 10
+            done = True
+            self.on_goal = 1
         s = np.concatenate((self.uav_pos, self.uav_euler, dist1, [1. if self.on_goal else 0.]))
         #print 'pos: ', self.uav_pos
         return s, r, done
