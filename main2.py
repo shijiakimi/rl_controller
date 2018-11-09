@@ -66,7 +66,7 @@ def train(number_episodes, runtime=5.0, init_pos=None, target_position=None, pri
             sys.stdout.flush()
 
 train(100)
-#train(100)
+train(100)
 #train(100)
 plt.figure()
 plt.plot(scores, '.', alpha=0.5, color='red')
