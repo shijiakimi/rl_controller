@@ -77,4 +77,5 @@ plt.grid(True)
 
 plt.xlabel("Episode #")
 plt.xlim(0, len(scores))
+plt.savefig('rewards.png')
 plt.show()
