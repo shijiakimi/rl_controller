@@ -62,7 +62,7 @@ class ArmEnv(object):
         # new_uav_v = self.uav_v + action
         # self.uav_pos = (new_uav_v ** 2 - self.uav_v ** 2) / (2 * self.dt)
         # self.uav_v = new_uav_v
-        self.uav_pos += [0,0, action[0]]
+        self.uav_pos += [0,0, action[0]*self.dt]
         self.time += self.dt
         dist1 = [(self.goal['x'] - self.uav_pos[0]), (self.goal['y'] - self.uav_pos[1]),
                  (self.goal['z'] - self.uav_pos[2])]
