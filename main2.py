@@ -1,12 +1,12 @@
 import sys
 import numpy as np
 from RLDDPG import DDPG
-from newTask import Task
+from task import Landing as Task
 from OUNoise import OUNoise
 
 max_episodes = 1000
-target_pos = np.array([0., 0., 15.])
-task = Task(target_pos=target_pos, init_pose=[0., 0., 0.01, 0., 0., 0.], pos_noise=0.25, ang_noise=None, vel_noise=0.15, ang_vel_noise=None)
+target_pos = np.array([0., 0., 0.])
+task = Task(target_pos=target_pos, init_pose=[0., 0., 10.0, 0., 0., 0.])
 agent = DDPG(task)
 scores = []
 grades = []
