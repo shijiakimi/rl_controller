@@ -3,8 +3,9 @@ import numpy as np
 from RLDDPG import DDPG
 from newTask import Task
 from OUNoise import OUNoise
+import matplotlib as mpl
+mpl.use('Agg')
 import matplotlib.pyplot as plt
-
 
 
 init_pose = np.array([0.0, 0.0, 10.0, 0.0, 0.0, 0.0])
