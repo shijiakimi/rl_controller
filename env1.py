@@ -99,6 +99,8 @@ class ArmEnv(object):
         '''
         if self.uav_pos[2] >= self.goal['z']:
             r += 10
+        if self.uav_pos[2] < 0:
+            r -= 100
         if self.uav_pos[2] - 0.5 * self.goal['l'] <= self.goal['z'] <= self.uav_pos[2] + 0.5 * self.goal['l']:
             r += 100
             self.on_goal += 1
