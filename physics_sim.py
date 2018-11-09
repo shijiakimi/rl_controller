@@ -148,6 +148,6 @@ class PhysicsSim():
         self.pose = np.array(new_positions + list(angles))
         self.time += self.dt
         if self.time > self.runtime:
-            print "time"
+            print ("time")
             self.done = True
         return self.done
