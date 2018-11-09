@@ -83,8 +83,8 @@ class Task():
         next_state = self.get_state()
         reward = self.get_reward()
 
-        if reward <= 0:
-            is_done = True
+        #if reward <= 0:
+            #is_done = True
 
         return next_state, reward, is_done
 
