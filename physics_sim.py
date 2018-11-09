@@ -136,15 +136,18 @@ class PhysicsSim():
         for ii in range(3):
             if position[ii] <= self.lower_bounds[ii]:
                 new_positions.append(self.lower_bounds[ii])
-                #self.done = True
+                print ("lower")
+                self.done = True
             elif position[ii] > self.upper_bounds[ii]:
                 new_positions.append(self.upper_bounds[ii])
-                #self.done = True
+                print ("upper")
+                self.done = True
             else:
                 new_positions.append(position[ii])
 
         self.pose = np.array(new_positions + list(angles))
         self.time += self.dt
         if self.time > self.runtime:
+            print "time"
             self.done = True
         return self.done
