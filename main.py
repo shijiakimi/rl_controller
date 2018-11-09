@@ -19,14 +19,14 @@ a_dim = env.action_dim
 a_bound = env.action_bound
 
 # set RL method (continuous)
-#a_scale = [1000,3000]
-a_scale = [-1, 1]
+a_scale = [1000,3000]
+#a_scale = [-1, 1]
 rl = DDPG(a_dim, s_dim, a_scale)
 
 
 noise_mean = 0
-noise_std_dev = 0.1
-noise_theta = 0.3
+noise_std_dev = 0.2
+noise_theta = 0.15
 noise_dt = env.dt
 noise = noise(a_dim, noise_mean, noise_std_dev, noise_theta, noise_dt)
 steps = []
