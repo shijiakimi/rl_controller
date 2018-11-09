@@ -68,7 +68,7 @@ def train(number_episodes, runtime=5.0, init_pos=None, target_position=None, pri
 train(100)
 #train(100)
 #train(100)
-plt.figure(figsize=(15,5))
+plt.figure()
 plt.plot(scores, '.', alpha=0.5, color='red')
 plt.plot(np.convolve(scores, np.ones(21)/21)[(21-1)//2:-21], color='red', label='Reward')
 plt.ylabel('Reward')
