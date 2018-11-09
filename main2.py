@@ -1,7 +1,7 @@
 import sys
 import numpy as np
 from RLDDPG import DDPG
-from newTask import Task
+from task import Task
 
 max_episodes = 1000
 target_pos = np.array([0., 0., 15.])
