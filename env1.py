@@ -28,14 +28,14 @@ class ArmEnv(object):
 
     def __init__(self, init_pos, init_ori, init_v, init_w):
 
-        self.uav_init_euler = init_ori
-        self.uav_init_v = init_v
-        self.uav_init_w = init_w
-        self.uav_euler = init_ori
-        self.uav_pos = init_pos
-        self.uav_init_pos = init_pos
-        self.uav_v = init_v
-        self.uav_w = init_w
+        self.uav_init_euler = np.array(init_ori)
+        self.uav_init_v = np.array(init_v)
+        self.uav_init_w = np.array(init_w)
+        self.uav_euler = np.array(init_ori)
+        self.uav_pos = np.array(init_pos)
+        self.uav_init_pos = np.array(init_pos)
+        self.uav_v = np.array(init_v)
+        self.uav_w = np.array(init_w)
         self.prop_wind_speed = np.zeros(4)
         self.on_goal = 0
         self.time = 0
@@ -100,7 +100,7 @@ class ArmEnv(object):
                 self.on_goal -= 1
         if done:
             r += 1000
-        
+
         #if self.uav_pos[2] >= self.goal['z']:
         #    r += 10
         #if self.uav_pos[2] < 0:
