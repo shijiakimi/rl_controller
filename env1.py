@@ -67,8 +67,9 @@ class ArmEnv(object):
         # self.uav_v = new_uav_v
         #self.uav_pos += [0,0, action[0]*self.dt]
         #self.time += self.dt
-        #dist1 = [(self.goal['x'] - self.uav_pos[0]), (self.goal['y'] - self.uav_pos[1]),
-        #         (self.goal['z'] - self.uav_pos[2])]
+        dist1 = [(self.goal['x'] - self.uav_pos[0]), (self.goal['y'] - self.uav_pos[1]),
+                 (self.goal['z'] - self.uav_pos[2])]
+        r = -np.linalg.norm(dist1)
         # r = -math.sqrt(dist1[0] ** 2) - math.sqrt(dist1[1] ** 2) - math.sqrt(dist1[2] ** 2)
         # r = - abs(dist1[2]) - abs(dist1[1]) - abs(dist1[0])
         #r = -min(abs(self.goal['z'] - self.uav_pos[2]), 20.0)
@@ -86,7 +87,7 @@ class ArmEnv(object):
         # done and reward
         # if 0 > self.uav_pos[2] or self.uav_pos[2] > 2 *  self.goal['z']:
         #    r -= 300
-        """
+
         if self.goal['x'] - self.goal['l']/2 < self.uav_pos[0] < self.goal['x'] + self.goal['l']/2:
             if self.goal['y'] - self.goal['l']/2 < self.uav_pos[1] < self.goal['y'] + self.goal['l']/2:
                 if self.goal['z'] - self.goal['l']/2 < self.uav_pos[2] < self.goal['z'] + self.goal['l']/2:
@@ -99,7 +100,7 @@ class ArmEnv(object):
                 self.on_goal -= 1
         if done:
             r += 1000
-        """
+        
         #if self.uav_pos[2] >= self.goal['z']:
         #    r += 10
         #if self.uav_pos[2] < 0:
@@ -112,8 +113,8 @@ class ArmEnv(object):
         #    done = True
         s = np.concatenate((self.uav_pos, self.uav_euler, self.uav_v, self.uav_w, [1. if self.on_goal else 0.]))
         # print 'pos: ', self.uav_pos
-        #return s, r, done
-        return s, done
+        return s, r, done
+        #return s, done
 
     def d_angles_to_angular_vel(self, dtheta):
         phi = self.uav_euler[0]
