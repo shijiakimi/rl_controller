@@ -9,8 +9,8 @@ class ArmEnv(object):
     action_bound = [0, 1]
     action_clip = [1, 5000]
     goal = {'x': 0, 'y': 0, 'z': 50, 'l': 2}
-    state_dim = 10
-    action_dim = 1
+    state_dim = 13
+    action_dim = 4
     gravity = np.array([0., 0., -9.81])
     mass = 0.985
     rho = 1.2
@@ -26,13 +26,16 @@ class ArmEnv(object):
     Iz = 1 / 12. * mass * (width ** 2 + length ** 2)
     moments_of_inertia = [Ix, Iy, Iz]
 
-    def __init__(self):
+    def __init__(self, init_pos, init_ori, init_v, init_w):
 
-        self.uav_euler = np.zeros(3)
-        self.uav_pos = np.zeros(3)
-        self.uav_init_pos = np.zeros(3)
-        self.uav_v = np.zeros(3)
-        self.uav_w = np.zeros(3)
+        self.uav_init_euler = init_ori
+        self.uav_init_v = init_v
+        self.uav_init_w = init_w
+        self.uav_euler = init_ori
+        self.uav_pos = init_pos
+        self.uav_init_pos = init_pos
+        self.uav_v = init_v
+        self.uav_w = init_w
         self.prop_wind_speed = np.zeros(4)
         self.on_goal = 0
         self.time = 0
@@ -41,8 +44,8 @@ class ArmEnv(object):
         done = False
         # action = np.clip(action, self.action_clip[0], self.action_clip[1])
         # print 'action', action
-        """
-        action = [action_[0]] * 4
+
+        #action = [action_[0]] * 4
         self.get_prop_wind_speed()
         thrusts = self.get_thrust(action)
         #print 'thrust', thrusts
@@ -58,17 +61,17 @@ class ArmEnv(object):
         self.uav_euler = (self.uav_euler + 2 * np.pi) % (2 * np.pi)
         self.uav_w += angular_acc * self.dt
 
-        """
+
         # new_uav_v = self.uav_v + action
         # self.uav_pos = (new_uav_v ** 2 - self.uav_v ** 2) / (2 * self.dt)
         # self.uav_v = new_uav_v
-        self.uav_pos += [0,0, action[0]*self.dt]
-        self.time += self.dt
-        dist1 = [(self.goal['x'] - self.uav_pos[0]), (self.goal['y'] - self.uav_pos[1]),
-                 (self.goal['z'] - self.uav_pos[2])]
+        #self.uav_pos += [0,0, action[0]*self.dt]
+        #self.time += self.dt
+        #dist1 = [(self.goal['x'] - self.uav_pos[0]), (self.goal['y'] - self.uav_pos[1]),
+        #         (self.goal['z'] - self.uav_pos[2])]
         # r = -math.sqrt(dist1[0] ** 2) - math.sqrt(dist1[1] ** 2) - math.sqrt(dist1[2] ** 2)
         # r = - abs(dist1[2]) - abs(dist1[1]) - abs(dist1[0])
-        r = -min(abs(self.goal['z'] - self.uav_pos[2]), 20.0)
+        #r = -min(abs(self.goal['z'] - self.uav_pos[2]), 20.0)
         # r /= 3
         # r = np.tanh(1-1.0/50 * (abs(dist1[0]) + abs(dist1[1]) + abs(dist1[2])))
         # rp = 0.004 * math.sqrt(dist1[0]**2 + dist1[1]**2 + dist1[2]**2)
@@ -83,7 +86,7 @@ class ArmEnv(object):
         # done and reward
         # if 0 > self.uav_pos[2] or self.uav_pos[2] > 2 *  self.goal['z']:
         #    r -= 300
-        '''
+        """
         if self.goal['x'] - self.goal['l']/2 < self.uav_pos[0] < self.goal['x'] + self.goal['l']/2:
             if self.goal['y'] - self.goal['l']/2 < self.uav_pos[1] < self.goal['y'] + self.goal['l']/2:
                 if self.goal['z'] - self.goal['l']/2 < self.uav_pos[2] < self.goal['z'] + self.goal['l']/2:
@@ -96,20 +99,21 @@ class ArmEnv(object):
                 self.on_goal -= 1
         if done:
             r += 1000
-        '''
-        if self.uav_pos[2] >= self.goal['z']:
-            r += 10
-        if self.uav_pos[2] < 0:
-            r -= 100
-        if self.uav_pos[2] - 0.5 * self.goal['l'] <= self.goal['z'] <= self.uav_pos[2] + 0.5 * self.goal['l']:
-            r += 100
-            self.on_goal += 1
-        if self.on_goal >= 10:
-            r += 1000
-            done = True
-        s = np.concatenate((self.uav_pos, self.uav_euler, dist1, [1. if self.on_goal else 0.]))
+        """
+        #if self.uav_pos[2] >= self.goal['z']:
+        #    r += 10
+        #if self.uav_pos[2] < 0:
+        #    r -= 100
+        #if self.uav_pos[2] - 0.5 * self.goal['l'] <= self.goal['z'] <= self.uav_pos[2] + 0.5 * self.goal['l']:
+        #    r += 100
+        #    self.on_goal += 1
+        #if self.on_goal >= 10:
+        #    r += 1000
+        #    done = True
+        s = np.concatenate((self.uav_pos, self.uav_euler, self.uav_v, self.uav_w, [1. if self.on_goal else 0.]))
         # print 'pos: ', self.uav_pos
-        return s, r, done
+        #return s, r, done
+        return s, done
 
     def d_angles_to_angular_vel(self, dtheta):
         phi = self.uav_euler[0]
@@ -172,16 +176,16 @@ class ArmEnv(object):
         return lin_force
 
     def reset(self):
-        self.uav_euler = np.zeros(3)
-        self.uav_pos = np.zeros(3)  # self.goal['x'] * np.random.rand(3)
-        self.uav_init_pos = np.array(list(self.uav_pos))
-        self.uav_v = np.zeros(3)
-        self.uav_w = np.zeros(3)
+        self.uav_euler = self.uav_init_euler
+        self.uav_pos = self.uav_init_pos  # self.goal['x'] * np.random.rand(3)
+        self.uav_init_pos = self.uav_init_pos
+        self.uav_v = self.uav_init_v
+        self.uav_w = self.uav_init_w
         self.prop_wind_speed = np.zeros(4)
         self.on_goal = 0
         dist1 = [(self.goal['x'] - self.uav_pos[0]), (self.goal['y'] - self.uav_pos[1]),
                  (self.goal['z'] - self.uav_pos[2])]
-        s = np.concatenate((self.uav_pos, self.uav_euler, dist1, [1. if self.on_goal else 0.]))
+        s = np.concatenate((self.uav_pos, self.uav_euler, self.uav_v, self.uav_w, [1. if self.on_goal else 0.]))
         return s
 
     def ground_v_to_body_v(self):
