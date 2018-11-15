@@ -29,6 +29,7 @@ steps = []
 def train():
     # start training
     for i in range(MAX_EPISODES):
+        print i
         s = env.reset()
         noise.reset()
         ep_r = 0.
