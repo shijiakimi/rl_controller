@@ -45,11 +45,11 @@ def train():
             n = noise.sample_noise()
             #print n
             a = a + n
-            s_, done = env.step(a)
+            s_, r, done = env.step(a)
             #if(abs(s_[6]) > env.goal['x'] or s_[7] > env.goal['y'] or s_[8] > env.goal['z']):
                 #continue
             #if(abs(s_[8]) < 2 * (env.goal['z'] + env.goal['l'])):
-            rl.store_transition(s, a, s_)
+            rl.store_transition(s, a, r, s_)
 
             #ep_r += r
             if rl.memory_full:

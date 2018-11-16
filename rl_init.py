@@ -84,8 +84,8 @@ class DDPG(object):
         self.sess.run(self.atrain, {self.S: bs, self.a: ba})
         #self.sess.run(self.ctrain, {self.S: bs, self.a: ba, self.R: br, self.S_: bs_})
 
-    def store_transition(self, s, a, s_):
-        transition = np.hstack((s, a, s_))
+    def store_transition(self, s, a, r, s_):
+        transition = np.hstack((s, a, [r], s_))
         index = self.pointer % MEMORY_CAPACITY  # replace the old memory with new memory
         self.memory[index, :] = transition
         self.pointer += 1
