@@ -135,7 +135,7 @@ class DDPG(object):
         return res
 
     def sample_all_actions(self):
-        action_setp = (self.a_bound[1] - self.a_bound[0]) / 100
+        action_setp = (self.a_bound[1] - self.a_bound[0]) / 10
         oned_sample_action = self.frange(self.a_bound[0], self.a_bound[1], action_setp)
         self.sample_actions = []
         for action in itertools.product(oned_sample_action, oned_sample_action, oned_sample_action, oned_sample_action):
