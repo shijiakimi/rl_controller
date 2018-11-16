@@ -27,7 +27,7 @@ class DDPG(object):
         self.S = tf.placeholder(tf.float32, [None, s_dim], 's')
         self.S_ = tf.placeholder(tf.float32, [None, s_dim], 's_')
         self.R = tf.placeholder(tf.float32, [None, 1], 'r')
-
+        self.q = tf.placeholder(tf.float32, [None, 1], 'q')
         #self.action_bound = [50, 50, 50, 50]
 
         with tf.variable_scope('Actor'):
@@ -57,9 +57,8 @@ class DDPG(object):
         #self.a_grads = tf.gradients(q, self.a)[0]
         #self.actor_grads = tf.gradients(self.a, self.ae_params, -self.a_grads)
 
-        q = self.calcQ(self.S[:6], self.S[6:9], self.S[9:12], self.a)
 
-        a_loss = - tf.reduce_mean(q)    # maximize the q
+        a_loss = - tf.reduce_mean(self.q)    # maximize the q
 
         #self.atrain = tf.train.AdamOptimizer(LR_A).apply_gradients(zip(self.actor_grads, self.ae_params))
         self.atrain = tf.train.AdamOptimizer(LR_A).minimize(a_loss, var_list=self.ae_params)
@@ -79,9 +78,15 @@ class DDPG(object):
         ba = bt[:, self.s_dim: self.s_dim + self.a_dim]
         #br = bt[:, -self.s_dim - 1: -self.s_dim]
         #bs_ = bt[:, -self.s_dim:]
+        bq = []
+        for i in range(len(bs)):
+            s = bs[i]
+            a = ba[i]
+            q = self.calcQ(s[:6], s[6:9], s[9:12], a)
+            bq.append(q)
+        bq = np.array(bq)
 
-
-        self.sess.run(self.atrain, {self.S: bs, self.a: ba})
+        self.sess.run(self.atrain, {self.S: bs, self.q: bq})
         #self.sess.run(self.ctrain, {self.S: bs, self.a: ba, self.R: br, self.S_: bs_})
 
     def store_transition(self, s, a, r, s_):
