@@ -33,11 +33,12 @@ class DDPG(object):
         with tf.variable_scope('Actor'):
             self.a = self._build_a(self.S, scope='eval', trainable=True)
             #self.a= tf.multiply(unbounded_a, self.a_bound)
-            a_ = self._build_a(self.S_, scope='target', trainable=False)
-        #with tf.variable_scope('Critic'):
+            #a_ = self._build_a(self.S_, scope='target', trainable=False)
+        with tf.variable_scope('Critic'):
             # assign self.a = a in memory when calculating q for td_error,
             # otherwise the self.a is from Actor when updating Actor
-            #q = self._build_c(self.S, self.a, scope='eval', trainable=True)
+            #q = self._build_c(self.S, self.a, scope='eval', trainable=False)
+            q = self.calcQ(self.S[:6], self.S[6:9], self.S[9:12], self.a)
             #q_ = self._build_c(self.S_, a_, scope='target', trainable=False)
 
         # networks parameters
@@ -56,9 +57,9 @@ class DDPG(object):
         #self.ctrain = tf.train.AdamOptimizer(LR_C).minimize(td_error, var_list=self.ce_params)
         #self.a_grads = tf.gradients(q, self.a)[0]
         #self.actor_grads = tf.gradients(self.a, self.ae_params, -self.a_grads)
+        #q = self.calcQ(self.S[:6], self.S[6:9], self.S[9:12], self.a)
 
-
-        a_loss = - tf.reduce_mean(self.q)    # maximize the q
+        a_loss = - tf.reduce_mean(q)    # maximize the q
 
         #self.atrain = tf.train.AdamOptimizer(LR_A).apply_gradients(zip(self.actor_grads, self.ae_params))
         self.atrain = tf.train.AdamOptimizer(LR_A).minimize(a_loss, var_list=self.ae_params)
@@ -86,7 +87,7 @@ class DDPG(object):
             bq.append(1)
         bq = np.array(bq)
 
-        self.sess.run(self.atrain, {self.S: bs, self.q: bq})
+        self.sess.run(self.atrain, {self.S: bs})
         #self.sess.run(self.ctrain, {self.S: bs, self.a: ba, self.R: br, self.S_: bs_})
 
     def store_transition(self, s, a, r, s_):
