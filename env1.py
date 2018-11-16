@@ -39,6 +39,7 @@ class ArmEnv(object):
         self.prop_wind_speed = np.zeros(4)
         self.on_goal = 0
         self.time = 0
+        print self.uav_init_pos, self.uav_init_euler, self.uav_init_v, self.uav_init_w
 
     def step(self, action):
         done = False
@@ -58,7 +59,7 @@ class ArmEnv(object):
 
         angular_acc = moments / self.moments_of_inertia
         self.uav_euler += self.uav_w * self.dt + 0.5 * angular_acc * self.dt ** 2
-        #self.uav_euler = (self.uav_euler + 2 * np.pi) % (2 * np.pi)
+        self.uav_euler = (self.uav_euler + 2 * np.pi) % (2 * np.pi)
         self.uav_w += angular_acc * self.dt
 
 
