@@ -18,7 +18,7 @@ a_bound = env.action_bound
 a_scale = [1000,3000]
 #a_scale = [0, 10]
 rl = DDPG(a_dim, s_dim, a_scale)
-
+print "after DDPG init"
 
 noise_mean = 0
 noise_std_dev = 0.2
