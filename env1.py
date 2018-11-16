@@ -58,7 +58,7 @@ class ArmEnv(object):
 
         angular_acc = moments / self.moments_of_inertia
         self.uav_euler += self.uav_w * self.dt + 0.5 * angular_acc * self.dt ** 2
-        self.uav_euler = (self.uav_euler + 2 * np.pi) % (2 * np.pi)
+        #self.uav_euler = (self.uav_euler + 2 * np.pi) % (2 * np.pi)
         self.uav_w += angular_acc * self.dt
 
 
@@ -177,7 +177,7 @@ class ArmEnv(object):
         return lin_force
 
     def reset(self):
-        print "reset"
+        #print "reset"
         self.uav_euler = self.uav_init_euler
         self.uav_pos = self.uav_init_pos  # self.goal['x'] * np.random.rand(3)
         self.uav_init_pos = self.uav_init_pos
@@ -185,7 +185,7 @@ class ArmEnv(object):
         self.uav_w = self.uav_init_w
         self.prop_wind_speed = np.zeros(4)
         self.on_goal = 0
-        #print "reset", self.uav_pos, self.uav_euler
+        print "reset", self.uav_pos, self.uav_euler
         #dist1 = [(self.goal['x'] - self.uav_pos[0]), (self.goal['y'] - self.uav_pos[1]),
         #         (self.goal['z'] - self.uav_pos[2])]
         s = np.concatenate((self.uav_pos, self.uav_euler, self.uav_v, self.uav_w, [1. if self.on_goal else 0.]))

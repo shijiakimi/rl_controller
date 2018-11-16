@@ -13,7 +13,7 @@ MAX_EP_STEPS = 100
 ON_TRAIN = True
 
 # set env
-env = ArmEnv([0.,0.,0.],[0.,0.,0.],[0.,0.,0.],[0.,0.,0.])
+env = ArmEnv([0., 0., 0.], [0., 0., 0.], [0., 0., 0.], [0., 0., 0.])
 s_dim = env.state_dim
 a_dim = env.action_dim
 a_bound = env.action_bound
@@ -34,7 +34,6 @@ def train():
     # start training
     for i in range(MAX_EPISODES):
         s = env.reset()
-        print "after reset in main"
         noise.reset()
         ep_r = 0.
         
