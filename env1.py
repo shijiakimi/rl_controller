@@ -39,7 +39,7 @@ class ArmEnv(object):
         self.prop_wind_speed = np.zeros(4)
         self.on_goal = 0
         self.time = 0
-        print self.uav_init_pos, self.uav_init_euler, self.uav_init_v, self.uav_init_w
+        #print self.uav_init_pos, self.uav_init_euler, self.uav_init_v, self.uav_init_w
 
     def step(self, action):
         done = False

@@ -17,6 +17,7 @@ a_bound = env.action_bound
 # set RL method (continuous)
 a_scale = [1000,3000]
 #a_scale = [0, 10]
+print a_scale
 rl = DDPG(a_dim, s_dim, a_scale)
 print "after DDPG init"
 
