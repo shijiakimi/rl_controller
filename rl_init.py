@@ -34,6 +34,7 @@ class DDPG(object):
             self.a = self._build_a(self.S, scope='eval', trainable=True)
             #self.a= tf.multiply(unbounded_a, self.a_bound)
             #a_ = self._build_a(self.S_, scope='target', trainable=False)
+        print "after actor init"
         with tf.variable_scope('Critic'):
             # assign self.a = a in memory when calculating q for td_error,
             # otherwise the self.a is from Actor when updating Actor
