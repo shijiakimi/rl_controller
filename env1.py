@@ -122,7 +122,7 @@ class ArmEnv(object):
         trans_mat = [[1, 0, -math.sin(theta)],
                      [0, math.cos(phi), math.cos(theta) * math.sin(phi)],
                      [0, -math.sin(phi), math.cos(theta) * math.cos(phi)]]
-        self.uav_w = list(np.dot(trans_mat, dtheta))
+        self.uav_w = np.dot(trans_mat, dtheta)
 
     def angular_vel_to_d_angles(self):
         phi = self.uav_euler[0]
@@ -130,7 +130,7 @@ class ArmEnv(object):
         trans_mat = [[1, 0, -math.sin(theta)],
                      [0, math.cos(phi), math.cos(theta) * math.sin(phi)],
                      [0, -math.sin(phi), math.cos(theta) * math.cos(phi)]]
-        return list(np.dot(np.linalg.inv(trans_mat), self.uav_w))
+        return np.dot(np.linalg.inv(trans_mat), self.uav_w)
 
     # R transfer earth to body frame
     def angles_to_R(self, thetas):
@@ -155,7 +155,7 @@ class ArmEnv(object):
             C_T = max(0, .12 - .07 * max(0, J) - .1 * max(0, J))
             thrusts.append(C_T * self.rho * n ** 2 * self.propeller_size ** 4)
 
-        return thrusts
+        return np.array(thrusts)
 
     def get_moments(self, thrusts):
         thrust_moments = np.array(
