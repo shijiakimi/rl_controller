@@ -82,8 +82,8 @@ class DDPG(object):
         for i in range(len(bs)):
             s = bs[i]
             a = ba[i]
-            q = self.calcQ(s[:6], s[6:9], s[9:12], a)
-            bq.append(q)
+            #q = self.calcQ(s[:6], s[6:9], s[9:12], a)
+            bq.append(1)
         bq = np.array(bq)
 
         self.sess.run(self.atrain, {self.S: bs, self.q: bq})
