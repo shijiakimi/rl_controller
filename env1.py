@@ -184,8 +184,9 @@ class ArmEnv(object):
         self.uav_w = self.uav_init_w
         self.prop_wind_speed = np.zeros(4)
         self.on_goal = 0
-        dist1 = [(self.goal['x'] - self.uav_pos[0]), (self.goal['y'] - self.uav_pos[1]),
-                 (self.goal['z'] - self.uav_pos[2])]
+        print "reset", self.uav_pos, self.uav_euler
+        #dist1 = [(self.goal['x'] - self.uav_pos[0]), (self.goal['y'] - self.uav_pos[1]),
+        #         (self.goal['z'] - self.uav_pos[2])]
         s = np.concatenate((self.uav_pos, self.uav_euler, self.uav_v, self.uav_w, [1. if self.on_goal else 0.]))
         return s
 
