@@ -29,6 +29,7 @@ class DDPG(object):
         self.R = tf.placeholder(tf.float32, [None, 1], 'r')
         self.q = tf.placeholder(tf.float32, [None, 1], 'q')
         #self.action_bound = [50, 50, 50, 50]
+        self.sample_all_actions()
 
         with tf.variable_scope('Actor'):
             self.a = self._build_a(self.S, scope='eval', trainable=True)
@@ -134,14 +135,13 @@ class DDPG(object):
         return res
 
     def sample_all_actions(self):
-        action_setp = (self.a_bound[1] - self.a_bound[0]) / 1000
+        action_setp = (self.a_bound[1] - self.a_bound[0]) / 100
         oned_sample_action = self.frange(self.a_bound[0], self.a_bound[1], action_setp)
         self.sample_actions = []
         for action in itertools.product(oned_sample_action, oned_sample_action, oned_sample_action, oned_sample_action):
             self.sample_actions.append(action)
 
     def calcQ(self, state, linear_acc, angular_acc, real_action):
-        self.sample_all_actions()
         sim = ArmEnv(state[:3], state[3:6], linear_acc, angular_acc)
         dic = {}
         min_action_dist = self.a_bound[1]* self.a_dim
