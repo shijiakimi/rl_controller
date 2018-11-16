@@ -34,6 +34,7 @@ def train():
     # start training
     for i in range(MAX_EPISODES):
         s = env.reset()
+        print "after reset in main"
         noise.reset()
         ep_r = 0.
         
