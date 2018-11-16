@@ -181,7 +181,7 @@ class ArmEnv(object):
         #print "reset"
         self.uav_euler = self.uav_init_euler
         self.uav_pos = self.uav_init_pos  # self.goal['x'] * np.random.rand(3)
-        self.uav_init_pos = self.uav_init_pos
+        #self.uav_init_pos = self.uav_init_pos
         self.uav_v = self.uav_init_v
         self.uav_w = self.uav_init_w
         self.prop_wind_speed = np.zeros(4)
