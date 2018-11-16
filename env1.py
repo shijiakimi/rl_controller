@@ -31,11 +31,11 @@ class ArmEnv(object):
         self.uav_init_euler = np.array(init_ori)
         self.uav_init_v = np.array(init_v)
         self.uav_init_w = np.array(init_w)
-        self.uav_euler = np.array(init_ori)
-        self.uav_pos = np.array(init_pos)
+        self.uav_euler = np.array(list(init_ori))
+        self.uav_pos = np.array(list(init_pos))
         self.uav_init_pos = np.array(init_pos)
-        self.uav_v = np.array(init_v)
-        self.uav_w = np.array(init_w)
+        self.uav_v = np.array(list(init_v))
+        self.uav_w = np.array(list(init_w))
         self.prop_wind_speed = np.zeros(4)
         self.on_goal = 0
         self.time = 0
@@ -179,11 +179,11 @@ class ArmEnv(object):
 
     def reset(self):
         #print "reset"
-        self.uav_euler = self.uav_init_euler
-        self.uav_pos = self.uav_init_pos  # self.goal['x'] * np.random.rand(3)
+        self.uav_euler = np.array(list(self.uav_init_euler))
+        self.uav_pos = np.array(list(self.uav_init_pos))  # self.goal['x'] * np.random.rand(3)
         #self.uav_init_pos = self.uav_init_pos
-        self.uav_v = self.uav_init_v
-        self.uav_w = self.uav_init_w
+        self.uav_v = np.array(list(self.uav_init_v))
+        self.uav_w = np.array(list(self.uav_init_w))
         self.prop_wind_speed = np.zeros(4)
         self.on_goal = 0
         print "reset", self.uav_pos, self.uav_euler
