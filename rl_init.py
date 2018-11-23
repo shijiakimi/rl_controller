@@ -85,7 +85,7 @@ class DDPG(object):
         for i in range(len(bs)):
             s = bs[i]
             a = ba[i]
-            print s[:3], s[3:6]
+            print s, s[:3], s[3:6], s[6:9], s[9:12]
             qa_grad = self.calcQAGrad(s[:6], s[6:9], s[9:12], a)
             qa_grads.append(qa_grad)
         qa_grads = np.array(qa_grads)
