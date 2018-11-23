@@ -28,8 +28,9 @@ class DDPG(object):
         self.S_ = tf.placeholder(tf.float32, [None, s_dim], 's_')
         self.R = tf.placeholder(tf.float32, [None, 1], 'r')
         self.q = tf.placeholder(tf.float32, [None, 1], 'q')
+        self.qa_grad = tf.placeholder(tf.float32,[None, a_dim], 'qa_grad')
         #self.action_bound = [50, 50, 50, 50]
-        self.sample_all_actions()
+        #self.sample_all_actions()
 
         with tf.variable_scope('Actor'):
             self.a = self._build_a(self.S, scope='eval', trainable=True)
@@ -52,19 +53,18 @@ class DDPG(object):
         # target net replacement
         self.soft_replace = [[tf.assign(ta, (1 - TAU) * ta + TAU * ea)]
                              for ta, ea in zip(self.at_params, self.ae_params)]
-
         #q_target = self.R + GAMMA * q_
         # in the feed_dic for the td_error, the self.a should change to actions in memory
         #td_error = tf.losses.mean_squared_error(labels=q_target, predictions=q)
         #self.ctrain = tf.train.AdamOptimizer(LR_C).minimize(td_error, var_list=self.ce_params)
         #self.a_grads = tf.gradients(q, self.a)[0]
-        #self.actor_grads = tf.gradients(self.a, self.ae_params, -self.a_grads)
+        self.actor_grads = tf.gradients(self.a, self.ae_params, -self.qa_grad)
         #q = self.calcQ(self.S[:6], self.S[6:9], self.S[9:12], self.a)
 
-        a_loss = - tf.reduce_mean(self.q)    # maximize the q
+        #a_loss = - tf.reduce_mean(self.q)    # maximize the q
 
-        #self.atrain = tf.train.AdamOptimizer(LR_A).apply_gradients(zip(self.actor_grads, self.ae_params))
-        self.atrain = tf.train.AdamOptimizer(LR_A).minimize(a_loss, var_list=self.ae_params)
+        self.atrain = tf.train.AdamOptimizer(LR_A).apply_gradients(zip(self.actor_grads, self.ae_params))
+        #self.atrain = tf.train.AdamOptimizer(LR_A).minimize(a_loss, var_list=self.ae_params)
         self.sess.run(tf.global_variables_initializer())
 
     def choose_action(self, s):
@@ -81,15 +81,15 @@ class DDPG(object):
         ba = bt[:, self.s_dim: self.s_dim + self.a_dim]
         #br = bt[:, -self.s_dim - 1: -self.s_dim]
         #bs_ = bt[:, -self.s_dim:]
-        bq = []
+        qa_grads = []
         for i in range(len(bs)):
             s = bs[i]
             a = ba[i]
-            q = self.calcQ(s[:6], s[6:9], s[9:12], a)
-            bq.append(q)
-        bq = np.array(bq)
+            qa_grad = self.calcQAGrad(s[:6], s[6:9], s[9:12], a)
+            qa_grads.append(qa_grad)
+        qa_grads = np.array(qa_grads)
 
-        self.sess.run(self.atrain, {self.S: bs, self.q : bq})
+        self.sess.run(self.atrain, {self.S: bs, self.qa_grad : qa_grads})
         #self.sess.run(self.ctrain, {self.S: bs, self.a: ba, self.R: br, self.S_: bs_})
 
     def store_transition(self, s, a, r, s_):
@@ -141,12 +141,32 @@ class DDPG(object):
         for action in itertools.product(oned_sample_action, oned_sample_action, oned_sample_action, oned_sample_action):
             self.sample_actions.append(action)
 
-    def calcQ(self, state, linear_acc, angular_acc, real_action):
+    def calcQAGrad(self, state, linear_acc, angular_acc, real_action):
         sim = ArmEnv(state[:3], state[3:6], linear_acc, angular_acc)
-        dic = {}
-        min_action_dist = self.a_bound[1]* self.a_dim
-        nearest_action = [0] * self.a_dim
+        #dic = {}
+        #min_action_dist = self.a_bound[1]* self.a_dim
+        #nearest_action = [0] * self.a_dim
         goal = np.array([sim.goal['x'], sim.goal['y'], sim.goal['z']])
+        dist = np.linalg.norm(goal - state[:3])
+        QAGrad = []
+        for i in range(len(real_action)):
+            delta = real_action[i] / 100
+            action_high = list(real_action)
+            action_low = list(real_action)
+            action_high[i] += delta
+            action_low[i] -= delta
+            next_state_high, r, done = sim.step(action_high)
+            sim.reset()
+            next_state_low, r, done = sim.step(action_low)
+            dist_high = np.linalg.norm(goal - next_state_high[:3])
+            dist_low = np.linalg.norm(goal - next_state_low[:3])
+            q_high = float(dist - dist_high) / dist
+            q_low = float(dist - dist_low) / dist
+            grad = (q_high - q_low) * 0.5 / delta
+            QAGrad.append(grad)
+        return QAGrad
+
+        """
         for action in self.sample_actions:
             action_dist = np.linalg.norm(real_action - action)
             if action_dist < min_action_dist:
@@ -164,3 +184,4 @@ class DDPG(object):
             if action == nearest_action:
                 return idx
             idx += 1
+        """
