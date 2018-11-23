@@ -47,12 +47,12 @@ def train():
 
             #env.render()
 
-            a = rl.choose_action(s)
+            #a = rl.choose_action(s)
             #print "action: ", a
             #n = noise.sample_noise()
             #print n
             #a = a + n
-            s_, r, done = env.step(a)
+            #s_, r, done = env.step(a)
             #if(abs(s_[6]) > env.goal['x'] or s_[7] > env.goal['y'] or s_[8] > env.goal['z']):
                 #continue
             #if(abs(s_[8]) < 2 * (env.goal['z'] + env.goal['l'])):
@@ -65,9 +65,9 @@ def train():
 
             #s = s_
 
-            if done or j == MAX_EP_STEPS-1:
-                print('Ep: %i | %s | ep_r: %.1f | step: %i | %.2f, %.2f, %.2f | %.2f, %.2f, %.2f | %.2f, %.2f, %.2f'% (i, '---' if not done else 'done', ep_r, j, env.uav_init_pos[0], env.uav_init_pos[1], env.uav_init_pos[2], env.uav_pos[0], env.uav_pos[1], env.uav_pos[2], env.uav_pos[0] - env.uav_init_pos[0], env.uav_pos[1] - env.uav_init_pos[1], env.uav_pos[2] - env.uav_init_pos[2]))
-                break
+            #if done or j == MAX_EP_STEPS-1:
+                #print('Ep: %i | %s | ep_r: %.1f | step: %i | %.2f, %.2f, %.2f | %.2f, %.2f, %.2f | %.2f, %.2f, %.2f'% (i, '---' if not done else 'done', ep_r, j, env.uav_init_pos[0], env.uav_init_pos[1], env.uav_init_pos[2], env.uav_pos[0], env.uav_pos[1], env.uav_pos[2], env.uav_pos[0] - env.uav_init_pos[0], env.uav_pos[1] - env.uav_init_pos[1], env.uav_pos[2] - env.uav_init_pos[2]))
+                #break
     #j += 1
     #plt.plot(x,range(MAX_EPISODES))
     #plt.plot(x,range(MAX_EPISODES))
