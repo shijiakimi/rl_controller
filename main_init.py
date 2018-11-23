@@ -37,8 +37,8 @@ def train():
     # start training
     for i in range(MAX_EPISODES):
         print i
-        s = env.reset()
-        noise.reset()
+        #s = env.reset()
+        #noise.reset()
         ep_r = 0.
 
         for j in range(MAX_EP_STEPS):
@@ -56,14 +56,14 @@ def train():
             #if(abs(s_[6]) > env.goal['x'] or s_[7] > env.goal['y'] or s_[8] > env.goal['z']):
                 #continue
             #if(abs(s_[8]) < 2 * (env.goal['z'] + env.goal['l'])):
-            rl.store_transition(s, a, r, s_)
+            #rl.store_transition(s, a, r, s_)
 
             #ep_r += r
-            if rl.memory_full:
+            #if rl.memory_full:
                 # start to learn once has fulfilled the memory
-                rl.learn()
+            rl.learn()
 
-            s = s_
+            #s = s_
 
             if done or j == MAX_EP_STEPS-1:
                 print('Ep: %i | %s | ep_r: %.1f | step: %i | %.2f, %.2f, %.2f | %.2f, %.2f, %.2f | %.2f, %.2f, %.2f'% (i, '---' if not done else 'done', ep_r, j, env.uav_init_pos[0], env.uav_init_pos[1], env.uav_init_pos[2], env.uav_pos[0], env.uav_pos[1], env.uav_pos[2], env.uav_pos[0] - env.uav_init_pos[0], env.uav_pos[1] - env.uav_init_pos[1], env.uav_pos[2] - env.uav_init_pos[2]))
