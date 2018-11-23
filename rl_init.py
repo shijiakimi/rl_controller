@@ -53,8 +53,8 @@ class DDPG(object):
         #self.ct_params = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope='Critic/target')
 
         # target net replacement
-        self.soft_replace = [[tf.assign(ta, (1 - TAU) * ta + TAU * ea)]
-                             for ta, ea in zip(self.at_params, self.ae_params)]
+        #self.soft_replace = [[tf.assign(ta, (1 - TAU) * ta + TAU * ea)]
+        #                     for ta, ea in zip(self.at_params, self.ae_params)]
         #q_target = self.R + GAMMA * q_
         # in the feed_dic for the td_error, the self.a should change to actions in memory
         #td_error = tf.losses.mean_squared_error(labels=q_target, predictions=q)
