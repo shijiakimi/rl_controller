@@ -85,7 +85,7 @@ class DDPG(object):
         for i in range(len(bs)):
             s = bs[i]
             a = ba[i]
-            print s, s[:3], s[3:6], s[6:9], s[9:12]
+            #print s, s[:3], s[3:6], s[6:9], s[9:12]
             qa_grad = self.calcQAGrad(s[:6], s[6:9], s[9:12], a)
             qa_grads.append(qa_grad)
         qa_grads = np.array(qa_grads)
@@ -144,7 +144,7 @@ class DDPG(object):
 
     def calcQAGrad(self, state, linear_acc, angular_acc, real_action):
         sim = ArmEnv(state[:3], state[3:6], linear_acc, angular_acc)
-        print "start calc qaGrad: ", sim.uav_pos
+        #print "start calc qaGrad: ", sim.uav_pos
         #dic = {}
         #min_action_dist = self.a_bound[1]* self.a_dim
         #nearest_action = [0] * self.a_dim
@@ -159,7 +159,7 @@ class DDPG(object):
             action_low[i] -= delta
             next_state_high, r, done = sim.step(action_high)
             sim.reset()
-            print "calc qaGrad after reset: ", sim.uav_pos
+            #print "calc qaGrad after reset: ", sim.uav_pos
             next_state_low, r, done = sim.step(action_low)
             dist_high = np.linalg.norm(goal - next_state_high[:3])
             dist_low = np.linalg.norm(goal - next_state_low[:3])
