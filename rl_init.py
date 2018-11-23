@@ -95,6 +95,7 @@ class DDPG(object):
             rand_a = np.random.uniform(self.a_bound[0], self.a_bound[1], size = 4)
             rand_state = np.append(rand_pos, rand_euler)
             rand_vel = np.append(rand_v, rand_w)
+            rand_vel = np.append(rand_vel, [0])
             #a.append(list(rand_a))
             bs.append(list(np.append(rand_state, rand_vel)))
             #s = bs[i]
