@@ -3,6 +3,7 @@ from env1 import ArmEnv
 from rl_init import DDPG
 import matplotlib.pyplot as plt
 from noise import noise
+import numpy as np
 
 MAX_EPISODES = 3000
 MAX_EP_STEPS = 100
@@ -18,7 +19,12 @@ a_bound = env.action_bound
 a_scale = [1000,3000]
 #a_scale = [0, 10]
 #print a_scale
-rl = DDPG(a_dim, s_dim, a_scale)
+sz = max(env.goal['x'], max(env.goal['y'], env.goal['z']))
+linear_upper = 300
+angular_upper = np.pi
+s_bound_upper = [sz, np.pi / 2, linear_upper, angular_upper]
+s_bound_lower = [-sz, -np.pi / 2, -linear_upper, -angular_upper]
+rl = DDPG(a_dim, s_dim, a_scale, s_bound_upper, s_bound_lower)
 #print "after DDPG init"
 
 noise_mean = 0

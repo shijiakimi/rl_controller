@@ -12,18 +12,20 @@ LR_C = 0.001    # learning rate for critic
 GAMMA = 0.9     # reward discount
 TAU = 0.01      # soft replacement
 MEMORY_CAPACITY = 10000
-BATCH_SIZE = 64
+BATCH_SIZE = 128
+
 
 
 class DDPG(object):
-    def __init__(self, a_dim, s_dim, a_bound,):
+    def __init__(self, a_dim, s_dim, a_bound, s_bound_upper, s_bound_lower):
         self.memory = np.zeros((MEMORY_CAPACITY, s_dim * 2 + a_dim + 1), dtype=np.float32)
         self.pointer = 0
         self.memory_full = False
         self.sess = tf.Session()
         self.a_replace_counter, self.c_replace_counter = 0, 0
-
         self.a_dim, self.s_dim, self.a_bound = a_dim, s_dim, a_bound
+        self.s_bound_upper = s_bound_upper
+        self.s_bound_lower = s_bound_lower
         self.S = tf.placeholder(tf.float32, [None, s_dim], 's')
         self.S_ = tf.placeholder(tf.float32, [None, s_dim], 's_')
         self.R = tf.placeholder(tf.float32, [None, 1], 'r')
@@ -35,7 +37,7 @@ class DDPG(object):
         with tf.variable_scope('Actor'):
             self.a = self._build_a(self.S, scope='eval', trainable=True)
             #self.a= tf.multiply(unbounded_a, self.a_bound)
-            a_ = self._build_a(self.S_, scope='target', trainable=False)
+            #a_ = self._build_a(self.S_, scope='target', trainable=False)
         print "after actor init"
         #with tf.variable_scope('Critic'):
             # assign self.a = a in memory when calculating q for td_error,
@@ -46,7 +48,7 @@ class DDPG(object):
 
         # networks parameters
         self.ae_params = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope='Actor/eval')
-        self.at_params = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope='Actor/target')
+        #self.at_params = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope='Actor/target')
         #self.ce_params = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope='Critic/eval')
         #self.ct_params = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope='Critic/target')
 
@@ -73,23 +75,36 @@ class DDPG(object):
 
     def learn(self):
         # soft target replacement
-        self.sess.run(self.soft_replace)
+        #self.sess.run(self.soft_replace)
 
-        indices = np.random.choice(MEMORY_CAPACITY, size=BATCH_SIZE)
-        bt = self.memory[indices, :]
-        bs = bt[:, :self.s_dim]
-        ba = bt[:, self.s_dim: self.s_dim + self.a_dim]
+        #indices = np.random.choice(MEMORY_CAPACITY, size=BATCH_SIZE)
+        #bt = self.memory[indices, :]
+        #bs = bt[:, :self.s_dim]
+        #ba = bt[:, self.s_dim: self.s_dim + self.a_dim]
         #br = bt[:, -self.s_dim - 1: -self.s_dim]
         #bs_ = bt[:, -self.s_dim:]
+
+        bs = []
+        #a = []
         qa_grads = []
-        for i in range(len(bs)):
-            s = bs[i]
-            a = ba[i]
+        for i in range(BATCH_SIZE):
+            rand_pos = np.random.uniform(self.s_bound_lower[0], self.s_bound_upper[0], size = 3)
+            rand_euler = np.random.uniform(self.s_bound_lower[1], self.s_bound_upper[1], size = 3)
+            rand_v = np.random.uniform(self.s_bound_lower[2], self.s_bound_upper[2], size = 3)
+            rand_w = np.random.uniform(self.s_bound_lower[3], self.s_bound_upper[3], size = 3)
+            rand_a = np.random.uniform(self.a_bound[0], self.a_bound[1], size = 4)
+            rand_state = np.append(rand_pos, rand_euler)
+            rand_vel = np.append(rand_v, rand_w)
+            #a.append(list(rand_a))
+            bs.append(list(np.append(rand_state, rand_vel)))
+            #s = bs[i]
+            #a = ba[i]
             #print s, s[:3], s[3:6], s[6:9], s[9:12]
-            qa_grad = self.calcQAGrad(s[:6], s[6:9], s[9:12], a)
+            qa_grad = self.calcQAGrad(rand_state, rand_v, rand_w, rand_a)
             qa_grads.append(qa_grad)
         qa_grads = np.array(qa_grads)
-
+        bs = np.array(bs)
+        #a = np.array(a)
         self.sess.run(self.atrain, {self.S: bs, self.qa_grad : qa_grads})
         #self.sess.run(self.ctrain, {self.S: bs, self.a: ba, self.R: br, self.S_: bs_})
 
@@ -142,8 +157,8 @@ class DDPG(object):
         for action in itertools.product(oned_sample_action, oned_sample_action, oned_sample_action, oned_sample_action):
             self.sample_actions.append(action)
 
-    def calcQAGrad(self, state, linear_acc, angular_acc, real_action):
-        sim = ArmEnv(state[:3], state[3:6], linear_acc, angular_acc)
+    def calcQAGrad(self, state, v, w, real_action):
+        sim = ArmEnv(state[:3], state[3:6], v, w)
         #print "start calc qaGrad: ", sim.uav_pos
         #dic = {}
         #min_action_dist = self.a_bound[1]* self.a_dim
