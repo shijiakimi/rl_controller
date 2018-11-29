@@ -195,7 +195,7 @@ class ArmEnv(object):
         #print "reset", self.uav_pos, self.uav_euler
         #dist1 = [(self.goal['x'] - self.uav_pos[0]), (self.goal['y'] - self.uav_pos[1]),
         #         (self.goal['z'] - self.uav_pos[2])]
-        s = np.concatenate((self.uav_pos, self.uav_euler, self.uav_v, self.uav_w, [1. if self.on_goal else 0.]))
+        s = np.concatenate((self.uav_pos, self.uav_euler, self.uav_v, self.uav_w, self.prop_rot_speed, [1. if self.on_goal else 0.]))
         return s
 
     def ground_v_to_body_v(self):
