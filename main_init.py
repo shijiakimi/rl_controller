@@ -86,7 +86,7 @@ def eval():
     while i < 200:
         s = env.reset()
         for _ in range(MAX_EP_STEPS):
-            env.render()
+            #env.render()
             a = rl.choose_action(s)
             s, r, done = env.step(a)
         print s[:3]
