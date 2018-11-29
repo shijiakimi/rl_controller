@@ -7,10 +7,10 @@ import numpy as np
 
 MAX_EPISODES = 500
 MAX_EP_STEPS = 100
-ON_TRAIN = False
+ON_TRAIN = True
 
 # set env
-env = ArmEnv([0., 0., 0.], [0., 0., 0.], [0., 0., 0.], [0., 0., 0.], [0., 0., 0., 0.])
+env = ArmEnv([0., 0., 0.], [0., 0., 0.], [0., 0., 0.], [0., 0., 0.], [1000., 1000., 1000., 1000.])
 s_dim = env.state_dim
 a_dim = env.action_dim
 a_bound = env.action_bound
@@ -76,6 +76,14 @@ def train():
     #plt.plot(x,range(MAX_EPISODES))
     #plt.show
     rl.save()
+    i = 0
+    while i < 200:
+        s = env.reset()
+        for _ in range(MAX_EP_STEPS):
+            #env.render()
+            a = rl.choose_action(s)
+            s, r, done = env.step(a)
+        print s[:3]
 
 
 def eval():
