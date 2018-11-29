@@ -22,8 +22,10 @@ a_scale = [-300,300]
 sz = max(env.goal['x'], max(env.goal['y'], env.goal['z']))
 linear_upper = 300
 angular_upper = np.pi
-s_bound_upper = [sz, np.pi / 2, linear_upper, angular_upper]
-s_bound_lower = [-sz, -np.pi / 2, -linear_upper, -angular_upper]
+prop_speed_low = 1
+prop_speed_high = 3000
+s_bound_upper = [sz, np.pi / 2, linear_upper, angular_upper, prop_speed_high]
+s_bound_lower = [-sz, -np.pi / 2, -linear_upper, -angular_upper, prop_speed_low]
 rl = DDPG(a_dim, s_dim, a_scale, s_bound_upper, s_bound_lower)
 #print "after DDPG init"
 

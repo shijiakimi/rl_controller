@@ -9,7 +9,7 @@ class ArmEnv(object):
     action_bound = [0, 1]
     prop_speed_clip = [1, 5000]
     goal = {'x': 0, 'y': 0, 'z': 20, 'l': 2}
-    state_dim = 13
+    state_dim = 17
     action_dim = 4
     gravity = np.array([0., 0., -9.81])
     mass = 0.985
@@ -26,7 +26,7 @@ class ArmEnv(object):
     Iz = 1 / 12. * mass * (width ** 2 + length ** 2)
     moments_of_inertia = [Ix, Iy, Iz]
 
-    def __init__(self, init_pos, init_ori, init_v, init_w):
+    def __init__(self, init_pos, init_ori, init_v, init_w, init_prop_speed):
 
         self.uav_init_euler = np.array(init_ori)
         self.uav_init_v = np.array(init_v)
@@ -36,7 +36,8 @@ class ArmEnv(object):
         self.uav_init_pos = np.array(init_pos)
         self.uav_v = np.array(list(init_v))
         self.uav_w = np.array(list(init_w))
-        self.prop_rot_speed = np.zeros(4)
+        self.prop_rot_speed = np.array(list(init_prop_speed))
+        self.init_prop_speed = np.array(list(init_prop_speed))
         self.prop_wind_speed = np.zeros(4)
         self.on_goal = 0
         self.time = 0
@@ -116,7 +117,7 @@ class ArmEnv(object):
         #if self.on_goal >= 10:
         #    r += 1000
         #    done = True
-        s = np.concatenate((self.uav_pos, self.uav_euler, self.uav_v, self.uav_w, [1. if self.on_goal else 0.]))
+        s = np.concatenate((self.uav_pos, self.uav_euler, self.uav_v, self.uav_w, self.prop_rot_speed, [1. if self.on_goal else 0.]))
         # print 'pos: ', self.uav_pos
         return s, r, done
         #return s, done
@@ -188,7 +189,8 @@ class ArmEnv(object):
         #self.uav_init_pos = self.uav_init_pos
         self.uav_v = np.array(list(self.uav_init_v))
         self.uav_w = np.array(list(self.uav_init_w))
-        self.prop_wind_speed = np.zeros(4)
+        self.prop_rot_speed = np.array(list(self.init_prop_speed))
+        self.get_prop_wind_speed()
         self.on_goal = 0
         #print "reset", self.uav_pos, self.uav_euler
         #dist1 = [(self.goal['x'] - self.uav_pos[0]), (self.goal['y'] - self.uav_pos[1]),
