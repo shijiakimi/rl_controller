@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from noise import noise
 import numpy as np
 
-MAX_EPISODES = 3000
+MAX_EPISODES = 500
 MAX_EP_STEPS = 100
 ON_TRAIN = True
 
