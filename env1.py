@@ -7,7 +7,7 @@ import math
 class ArmEnv(object):
     dt = .02
     action_bound = [0, 1]
-    action_clip = [1, 5000]
+    prop_speed_clip = [1, 5000]
     goal = {'x': 0, 'y': 0, 'z': 20, 'l': 2}
     state_dim = 13
     action_dim = 4
@@ -36,6 +36,7 @@ class ArmEnv(object):
         self.uav_init_pos = np.array(init_pos)
         self.uav_v = np.array(list(init_v))
         self.uav_w = np.array(list(init_w))
+        self.prop_rot_speed = np.zeros(4)
         self.prop_wind_speed = np.zeros(4)
         self.on_goal = 0
         self.time = 0
@@ -47,20 +48,23 @@ class ArmEnv(object):
         # print 'action', action
 
         #action = [action_[0]] * 4
+        self.prop_rot_speed += action
+        self.prop_rot_speed = np.clip(self.prop_rot_speed, self.prop_speed_clip[0], self.prop_speed_clip[1])
         self.get_prop_wind_speed()
-        thrusts = self.get_thrust(action)
+        thrusts = self.get_thrust(self.prop_rot_speed)
         #print 'thrust', thrusts
         linear_acc = self.get_linear_forces(thrusts) / self.mass
         #print 'linear_acc', linear_acc
-        self.uav_pos += self.uav_v * self.dt + 0.5 * linear_acc * self.dt ** 2
+        if linear_acc[2] > 0 or self.uav_pos > 0:
+            self.uav_pos += self.uav_v * self.dt + 0.5 * linear_acc * self.dt ** 2
         #print 'pos', self.uav_pos
-        self.uav_v += linear_acc * self.dt
-        moments = self.get_moments(thrusts)
+            self.uav_v += linear_acc * self.dt
 
-        angular_acc = moments / self.moments_of_inertia
-        self.uav_euler += self.uav_w * self.dt + 0.5 * angular_acc * self.dt ** 2
-        self.uav_euler = (self.uav_euler + 2 * np.pi) % (2 * np.pi)
-        self.uav_w += angular_acc * self.dt
+            moments = self.get_moments(thrusts)
+            angular_acc = moments / self.moments_of_inertia
+            self.uav_euler += self.uav_w * self.dt + 0.5 * angular_acc * self.dt ** 2
+            self.uav_euler = (self.uav_euler + 2 * np.pi) % (2 * np.pi)
+            self.uav_w += angular_acc * self.dt
 
 
         # new_uav_v = self.uav_v + action
