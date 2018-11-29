@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from noise import noise
 import numpy as np
 
-MAX_EPISODES = 300
+MAX_EPISODES = 1000
 MAX_EP_STEPS = 100
 ON_TRAIN = True
 
@@ -47,7 +47,7 @@ def train():
         for j in range(MAX_EP_STEPS):
             a = rl.choose_action(s)
             s, r, done = env.step(a)
-            print s[:3]
+        print s[:3]
             #j = 0
             #while not (s[0] > 400 or s[1] > 400 or s[0] < 0 or s[1] < 0):
 
