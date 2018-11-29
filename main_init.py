@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from noise import noise
 import numpy as np
 
-MAX_EPISODES = 200
+MAX_EPISODES = 300
 MAX_EP_STEPS = 100
 ON_TRAIN = True
 
@@ -41,11 +41,15 @@ def train():
         print i
         #s = env.reset()
         #noise.reset()
-        ep_r = 0.
-
+        #ep_r = 0.
+        rl.learn()
+        s = env.reset()
         for j in range(MAX_EP_STEPS):
-        #j = 0
-        #while not (s[0] > 400 or s[1] > 400 or s[0] < 0 or s[1] < 0):
+            a = rl.choose_action(s)
+            s, r, done = env.step(a)
+            print s[:3]
+            #j = 0
+            #while not (s[0] > 400 or s[1] > 400 or s[0] < 0 or s[1] < 0):
 
             #env.render()
 
@@ -63,7 +67,6 @@ def train():
             #ep_r += r
             #if rl.memory_full:
                 # start to learn once has fulfilled the memory
-            rl.learn()
 
             #s = s_
 
@@ -76,14 +79,6 @@ def train():
     #plt.plot(x,range(MAX_EPISODES))
     #plt.show
     rl.save()
-    i = 0
-    while i < 200:
-        s = env.reset()
-        for _ in range(MAX_EP_STEPS):
-            #env.render()
-            a = rl.choose_action(s)
-            s, r, done = env.step(a)
-        print s[:3]
 
 
 def eval():
