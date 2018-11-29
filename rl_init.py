@@ -184,7 +184,7 @@ class DDPG(object):
             q_high = float(dist - dist_high) / dist * 100
             q_low = float(dist - dist_low) / dist * 100
             grad = (q_high - q_low) * 0.5 / delta
-            QAGrad.append(grad)
+            QAGrad.append(-grad)
         return QAGrad
 
         """
