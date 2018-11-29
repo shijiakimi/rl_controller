@@ -92,16 +92,18 @@ class DDPG(object):
             rand_euler = np.random.uniform(self.s_bound_lower[1], self.s_bound_upper[1], size = 3)
             rand_v = np.random.uniform(self.s_bound_lower[2], self.s_bound_upper[2], size = 3)
             rand_w = np.random.uniform(self.s_bound_lower[3], self.s_bound_upper[3], size = 3)
+            rand_prop_speed = np.random.uniform(self.s_bound_lower[4], self.s_bound_upper[4], size = 4)
             rand_a = np.random.uniform(self.a_bound[0], self.a_bound[1], size = 4)
             rand_state = np.append(rand_pos, rand_euler)
             rand_vel = np.append(rand_v, rand_w)
+            rand_vel = np.append(rand_vel, rand_prop_speed)
             rand_vel = np.append(rand_vel, [0])
             #a.append(list(rand_a))
             bs.append(list(np.append(rand_state, rand_vel)))
             #s = bs[i]
             #a = ba[i]
             #print s, s[:3], s[3:6], s[6:9], s[9:12]
-            qa_grad = self.calcQAGrad(rand_state, rand_v, rand_w, rand_a)
+            qa_grad = self.calcQAGrad(rand_state, rand_v, rand_w, rand_prop_speed, rand_a)
             qa_grads.append(qa_grad)
         qa_grads = np.array(qa_grads)
         bs = np.array(bs)
@@ -158,8 +160,8 @@ class DDPG(object):
         for action in itertools.product(oned_sample_action, oned_sample_action, oned_sample_action, oned_sample_action):
             self.sample_actions.append(action)
 
-    def calcQAGrad(self, state, v, w, real_action):
-        sim = ArmEnv(state[:3], state[3:6], v, w)
+    def calcQAGrad(self, state, v, w, prop_speed, real_action):
+        sim = ArmEnv(state[:3], state[3:6], v, w, prop_speed)
         #print "start calc qaGrad: ", sim.uav_pos
         #dic = {}
         #min_action_dist = self.a_bound[1]* self.a_dim
