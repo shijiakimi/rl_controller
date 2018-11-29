@@ -7,7 +7,7 @@ import numpy as np
 
 MAX_EPISODES = 500
 MAX_EP_STEPS = 100
-ON_TRAIN = True
+ON_TRAIN = False
 
 # set env
 env = ArmEnv([0., 0., 0.], [0., 0., 0.], [0., 0., 0.], [0., 0., 0.], [0., 0., 0., 0.])
@@ -80,16 +80,16 @@ def train():
 
 def eval():
     rl.restore()
-    env.render()
-    env.viewer.set_vsync(True)
-    while True:
+    #env.render()
+    #env.viewer.set_vsync(True)
+    i = 0
+    while i < 200:
         s = env.reset()
         for _ in range(MAX_EP_STEPS):
             env.render()
             a = rl.choose_action(s)
             s, r, done = env.step(a)
-            if done:
-                break
+        print s[:3]
 
 
 if ON_TRAIN:
