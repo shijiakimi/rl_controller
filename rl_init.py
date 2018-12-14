@@ -98,6 +98,7 @@ class DDPG(object):
             rand_vel = np.append(rand_v, rand_w)
             rand_vel = np.append(rand_vel, rand_prop_speed)
             rand_vel = np.append(rand_vel, [0])
+            #rand_dest = np.random.uniform()
             #a.append(list(rand_a))
             bs.append(list(np.append(rand_state, rand_vel)))
             #s = bs[i]
@@ -169,18 +170,20 @@ class DDPG(object):
         goal = np.array([sim.goal['x'], sim.goal['y'], sim.goal['z']])
         dist = np.linalg.norm(goal - state[:3])
         QAGrad = []
-        for i in range(len(real_action)):
+        for i in range(len(real_action) - 1):
             delta = real_action[i] / 100
             action_high = list(real_action)
             action_low = list(real_action)
             action_high[i] += delta
             action_low[i] -= delta
-            next_state_high, r, done = sim.step(action_high)
-            sim.reset()
+            #next_state_high, r, done = sim.step(action_high)
+            #sim.reset()
             #print "calc qaGrad after reset: ", sim.uav_pos
-            next_state_low, r, done = sim.step(action_low)
-            dist_high = np.linalg.norm(goal - next_state_high[:3])
-            dist_low = np.linalg.norm(goal - next_state_low[:3])
+            #next_state_low, r, done = sim.step(action_low)
+            #dist_high = np.linalg.norm(goal - next_state_high[:3])
+            dist_high = np.linalg.norm(goal - state[:3] + action_high)
+            dist_low = np.linalg.norm(goal - state[:3] + action_low)
+            #dist_low = np.linalg.norm(goal - next_state_low[:3])
             q_high = float(dist - dist_high) / dist * 100
             q_low = float(dist - dist_low) / dist * 100
             grad = (q_high - q_low) * 0.5 / delta
