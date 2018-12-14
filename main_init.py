@@ -46,7 +46,8 @@ def train():
         s = env.reset()
         for j in range(MAX_EP_STEPS):
             a = rl.choose_action(s)
-            s, r, done = env.step(a)
+            #s, r, done = env.step(a)
+            s[:3] += a[:3]
         print s[:3]
             #j = 0
             #while not (s[0] > 400 or s[1] > 400 or s[0] < 0 or s[1] < 0):

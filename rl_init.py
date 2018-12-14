@@ -181,8 +181,8 @@ class DDPG(object):
             #print "calc qaGrad after reset: ", sim.uav_pos
             #next_state_low, r, done = sim.step(action_low)
             #dist_high = np.linalg.norm(goal - next_state_high[:3])
-            dist_high = np.linalg.norm(goal - state[:3] + action_high)
-            dist_low = np.linalg.norm(goal - state[:3] + action_low)
+            dist_high = np.linalg.norm(goal - state[:3] + action_high[:3])
+            dist_low = np.linalg.norm(goal - state[:3] + action_low[:3])
             #dist_low = np.linalg.norm(goal - next_state_low[:3])
             q_high = float(dist - dist_high) / dist * 100
             q_low = float(dist - dist_low) / dist * 100
