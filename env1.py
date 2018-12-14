@@ -10,7 +10,7 @@ class ArmEnv(object):
     prop_speed_clip = [1, 5000]
     goal = {'x': 0, 'y': 0, 'z': 20, 'l': 2}
     state_dim = 17
-    action_dim = 4
+    action_dim = 3
     gravity = np.array([0., 0., -9.81])
     mass = 0.985
     rho = 1.2
