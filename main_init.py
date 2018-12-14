@@ -16,7 +16,7 @@ a_dim = env.action_dim
 a_bound = env.action_bound
 
 # set RL method (continuous)
-a_scale = [-300,300]
+a_scale = [-1.,1.]
 #a_scale = [0, 10]
 #print a_scale
 sz = max(env.goal['x'], max(env.goal['y'], env.goal['z']))

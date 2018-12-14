@@ -7,13 +7,12 @@ from env1 import ArmEnv
 
 #####################  hyper parameters  ####################
 
-LR_A = 0.001    # learning rate for actor
-LR_C = 0.001    # learning rate for critic
-GAMMA = 0.9     # reward discount
-TAU = 0.01      # soft replacement
+LR_A = 0.001  # learning rate for actor
+LR_C = 0.001  # learning rate for critic
+GAMMA = 0.9  # reward discount
+TAU = 0.01  # soft replacement
 MEMORY_CAPACITY = 10000
 BATCH_SIZE = 256
-
 
 
 class DDPG(object):
@@ -30,43 +29,43 @@ class DDPG(object):
         self.S_ = tf.placeholder(tf.float32, [None, s_dim], 's_')
         self.R = tf.placeholder(tf.float32, [None, 1], 'r')
         self.q = tf.placeholder(tf.float32, [None, 1], 'q')
-        self.qa_grad = tf.placeholder(tf.float32,[None, a_dim], 'qa_grad')
-        #self.action_bound = [50, 50, 50, 50]
-        #self.sample_all_actions()
+        self.qa_grad = tf.placeholder(tf.float32, [None, a_dim], 'qa_grad')
+        # self.action_bound = [50, 50, 50, 50]
+        # self.sample_all_actions()
 
         with tf.variable_scope('Actor'):
             self.a = self._build_a(self.S, scope='eval', trainable=True)
-            #self.a= tf.multiply(unbounded_a, self.a_bound)
-            #a_ = self._build_a(self.S_, scope='target', trainable=False)
+            # self.a= tf.multiply(unbounded_a, self.a_bound)
+            # a_ = self._build_a(self.S_, scope='target', trainable=False)
         print "after actor init"
-        #with tf.variable_scope('Critic'):
-            # assign self.a = a in memory when calculating q for td_error,
-            # otherwise the self.a is from Actor when updating Actor
-            #q = self._build_c(self.S, self.a, scope='eval', trainable=False)
-            #q = self.calcQ(self.S[:6], self.S[6:9], self.S[9:12], self.a)
-            #q_ = self._build_c(self.S_, a_, scope='target', trainable=False)
+        # with tf.variable_scope('Critic'):
+        # assign self.a = a in memory when calculating q for td_error,
+        # otherwise the self.a is from Actor when updating Actor
+        # q = self._build_c(self.S, self.a, scope='eval', trainable=False)
+        # q = self.calcQ(self.S[:6], self.S[6:9], self.S[9:12], self.a)
+        # q_ = self._build_c(self.S_, a_, scope='target', trainable=False)
 
         # networks parameters
         self.ae_params = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope='Actor/eval')
-        #self.at_params = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope='Actor/target')
-        #self.ce_params = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope='Critic/eval')
-        #self.ct_params = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope='Critic/target')
+        # self.at_params = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope='Actor/target')
+        # self.ce_params = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope='Critic/eval')
+        # self.ct_params = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope='Critic/target')
 
         # target net replacement
-        #self.soft_replace = [[tf.assign(ta, (1 - TAU) * ta + TAU * ea)]
+        # self.soft_replace = [[tf.assign(ta, (1 - TAU) * ta + TAU * ea)]
         #                     for ta, ea in zip(self.at_params, self.ae_params)]
-        #q_target = self.R + GAMMA * q_
+        # q_target = self.R + GAMMA * q_
         # in the feed_dic for the td_error, the self.a should change to actions in memory
-        #td_error = tf.losses.mean_squared_error(labels=q_target, predictions=q)
-        #self.ctrain = tf.train.AdamOptimizer(LR_C).minimize(td_error, var_list=self.ce_params)
-        #self.a_grads = tf.gradients(q, self.a)[0]
+        # td_error = tf.losses.mean_squared_error(labels=q_target, predictions=q)
+        # self.ctrain = tf.train.AdamOptimizer(LR_C).minimize(td_error, var_list=self.ce_params)
+        # self.a_grads = tf.gradients(q, self.a)[0]
         self.actor_grads = tf.gradients(self.a, self.ae_params, -self.qa_grad)
-        #q = self.calcQ(self.S[:6], self.S[6:9], self.S[9:12], self.a)
+        # q = self.calcQ(self.S[:6], self.S[6:9], self.S[9:12], self.a)
 
-        #a_loss = - tf.reduce_mean(self.q)    # maximize the q
+        # a_loss = - tf.reduce_mean(self.q)    # maximize the q
 
         self.atrain = tf.train.AdamOptimizer(LR_A).apply_gradients(zip(self.actor_grads, self.ae_params))
-        #self.atrain = tf.train.AdamOptimizer(LR_A).minimize(a_loss, var_list=self.ae_params)
+        # self.atrain = tf.train.AdamOptimizer(LR_A).minimize(a_loss, var_list=self.ae_params)
         self.sess.run(tf.global_variables_initializer())
 
     def choose_action(self, s):
@@ -75,55 +74,59 @@ class DDPG(object):
 
     def learn(self):
         # soft target replacement
-        #self.sess.run(self.soft_replace)
+        # self.sess.run(self.soft_replace)
 
-        #indices = np.random.choice(MEMORY_CAPACITY, size=BATCH_SIZE)
-        #bt = self.memory[indices, :]
-        #bs = bt[:, :self.s_dim]
-        #ba = bt[:, self.s_dim: self.s_dim + self.a_dim]
-        #br = bt[:, -self.s_dim - 1: -self.s_dim]
-        #bs_ = bt[:, -self.s_dim:]
+        # indices = np.random.choice(MEMORY_CAPACITY, size=BATCH_SIZE)
+        # bt = self.memory[indices, :]
+        # bs = bt[:, :self.s_dim]
+        # ba = bt[:, self.s_dim: self.s_dim + self.a_dim]
+        # br = bt[:, -self.s_dim - 1: -self.s_dim]
+        # bs_ = bt[:, -self.s_dim:]
 
         bs = []
-        #a = []
+        # a = []
         qa_grads = []
         for i in range(BATCH_SIZE):
-            rand_pos = np.random.uniform(self.s_bound_lower[0], self.s_bound_upper[0], size = 3)
-            rand_euler = np.random.uniform(self.s_bound_lower[1], self.s_bound_upper[1], size = 3)
-            rand_v = np.random.uniform(self.s_bound_lower[2], self.s_bound_upper[2], size = 3)
-            rand_w = np.random.uniform(self.s_bound_lower[3], self.s_bound_upper[3], size = 3)
-            rand_prop_speed = np.random.uniform(self.s_bound_lower[4], self.s_bound_upper[4], size = 4)
-            rand_a = np.random.uniform(self.a_bound[0], self.a_bound[1], size = 3)
+            rand_pos = self.s_bound_lower[0] + (self.s_bound_upper[0] - self.s_bound_lower[0]) * np.random.random(
+                size=3)
+            rand_euler = self.s_bound_lower[1] + (self.s_bound_upper[1] - self.s_bound_lower[1]) * np.random.random(
+                size=3)
+            rand_v = self.s_bound_lower[2] + (self.s_bound_upper[2] - self.s_bound_lower[2]) * np.random.random(size=3)
+            rand_w = self.s_bound_lower[3] + (self.s_bound_upper[3] - self.s_bound_lower[3]) * np.random.random(size=3)
+            rand_prop_speed = self.s_bound_lower[4] + (
+                                                      self.s_bound_upper[4] - self.s_bound_lower[4]) * np.random.random(
+                size=4)
+            rand_a = self.a_bound[0] + (self.a_bound[1] - self.a_bound[0]) * np.random.random(size=3)
             rand_state = np.append(rand_pos, rand_euler)
             rand_vel = np.append(rand_v, rand_w)
             rand_vel = np.append(rand_vel, rand_prop_speed)
             rand_vel = np.append(rand_vel, [0])
-            #rand_dest = np.random.uniform()
-            #a.append(list(rand_a))
+            # rand_dest = np.random.uniform()
+            # a.append(list(rand_a))
             bs.append(list(np.append(rand_state, rand_vel)))
-            #s = bs[i]
-            #a = ba[i]
-            #print s, s[:3], s[3:6], s[6:9], s[9:12]
+            # s = bs[i]
+            # a = ba[i]
+            # print s, s[:3], s[3:6], s[6:9], s[9:12]
             qa_grad = self.calcQAGrad(rand_state, rand_v, rand_w, rand_prop_speed, rand_a)
             qa_grads.append(qa_grad)
         qa_grads = np.array(qa_grads)
         bs = np.array(bs)
-        #a = np.array(a)
-        self.sess.run(self.atrain, {self.S: bs, self.qa_grad : qa_grads})
-        #self.sess.run(self.ctrain, {self.S: bs, self.a: ba, self.R: br, self.S_: bs_})
+        # a = np.array(a)
+        self.sess.run(self.atrain, {self.S: bs, self.qa_grad: qa_grads})
+        # self.sess.run(self.ctrain, {self.S: bs, self.a: ba, self.R: br, self.S_: bs_})
 
     def store_transition(self, s, a, r, s_):
         transition = np.hstack((s, a, [r], s_))
         index = self.pointer % MEMORY_CAPACITY  # replace the old memory with new memory
         self.memory[index, :] = transition
         self.pointer += 1
-        if self.pointer > MEMORY_CAPACITY:      # indicator for learning
+        if self.pointer > MEMORY_CAPACITY:  # indicator for learning
             self.memory_full = True
 
     def _build_a(self, s, scope, trainable):
         with tf.variable_scope(scope):
-            net = tf.layers.dense(s,  200, activation=tf.nn.relu, name='l1', trainable=trainable)
-            net1 = tf.layers.dense(net,200, activation = tf.nn.relu, name = 'l2', trainable = trainable)
+            net = tf.layers.dense(s, 200, activation=tf.nn.relu, name='l1', trainable=trainable)
+            net1 = tf.layers.dense(net, 200, activation=tf.nn.relu, name='l2', trainable=trainable)
             a = tf.layers.dense(net1, self.a_dim, activation=tf.nn.relu, name='a', trainable=trainable)
             bounded_a = self.a_bound[0] + tf.nn.sigmoid(a) * (self.a_bound[1] - self.a_bound[0])
             return bounded_a
@@ -135,8 +138,8 @@ class DDPG(object):
             w1_a = tf.get_variable('w1_a', [self.a_dim, n_l1], trainable=trainable)
             b1 = tf.get_variable('b1', [1, n_l1], trainable=trainable)
             net = tf.nn.relu(tf.matmul(s, w1_s) + tf.matmul(a, w1_a) + b1)
-            net1 = tf.layers.dense(net, n_l1, activation=tf.nn.tanh, name = 'net1', trainable = trainable)
-            return tf.layers.dense(net1, 1, activation = tf.nn.tanh, trainable=trainable)  # Q(s,a)
+            net1 = tf.layers.dense(net, n_l1, activation=tf.nn.tanh, name='net1', trainable=trainable)
+            return tf.layers.dense(net1, 1, activation=tf.nn.tanh, trainable=trainable)  # Q(s,a)
 
     def save(self):
         saver = tf.train.Saver()
@@ -163,10 +166,10 @@ class DDPG(object):
 
     def calcQAGrad(self, state, v, w, prop_speed, real_action):
         sim = ArmEnv(state[:3], state[3:6], v, w, prop_speed)
-        #print "start calc qaGrad: ", sim.uav_pos
-        #dic = {}
-        #min_action_dist = self.a_bound[1]* self.a_dim
-        #nearest_action = [0] * self.a_dim
+        # print "start calc qaGrad: ", sim.uav_pos
+        # dic = {}
+        # min_action_dist = self.a_bound[1]* self.a_dim
+        # nearest_action = [0] * self.a_dim
         goal = np.array([sim.goal['x'], sim.goal['y'], sim.goal['z']])
         dist = np.linalg.norm(goal - state[:3])
         QAGrad = []
@@ -176,14 +179,14 @@ class DDPG(object):
             action_low = list(real_action)
             action_high[i] += delta
             action_low[i] -= delta
-            #next_state_high, r, done = sim.step(action_high)
-            #sim.reset()
-            #print "calc qaGrad after reset: ", sim.uav_pos
-            #next_state_low, r, done = sim.step(action_low)
-            #dist_high = np.linalg.norm(goal - next_state_high[:3])
+            # next_state_high, r, done = sim.step(action_high)
+            # sim.reset()
+            # print "calc qaGrad after reset: ", sim.uav_pos
+            # next_state_low, r, done = sim.step(action_low)
+            # dist_high = np.linalg.norm(goal - next_state_high[:3])
             dist_high = np.linalg.norm(goal - state[:3] + action_high)
             dist_low = np.linalg.norm(goal - state[:3] + action_low)
-            #dist_low = np.linalg.norm(goal - next_state_low[:3])
+            # dist_low = np.linalg.norm(goal - next_state_low[:3])
             q_high = float(dist - dist_high) / dist * 100
             q_low = float(dist - dist_low) / dist * 100
             grad = (q_high - q_low) * 0.5 / delta
