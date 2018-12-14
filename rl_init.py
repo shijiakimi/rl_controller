@@ -93,7 +93,7 @@ class DDPG(object):
             rand_v = np.random.uniform(self.s_bound_lower[2], self.s_bound_upper[2], size = 3)
             rand_w = np.random.uniform(self.s_bound_lower[3], self.s_bound_upper[3], size = 3)
             rand_prop_speed = np.random.uniform(self.s_bound_lower[4], self.s_bound_upper[4], size = 4)
-            rand_a = np.random.uniform(self.a_bound[0], self.a_bound[1], size = 4)
+            rand_a = np.random.uniform(self.a_bound[0], self.a_bound[1], size = 3)
             rand_state = np.append(rand_pos, rand_euler)
             rand_vel = np.append(rand_v, rand_w)
             rand_vel = np.append(rand_vel, rand_prop_speed)
